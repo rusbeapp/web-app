@@ -32,7 +32,6 @@ import {
   AccountAuthState,
   AuthStateService,
 } from '@rusbe/services/auth-state/auth-state.service';
-import { FirebaseService } from '@rusbe/services/firebase/firebase.service';
 
 import {
   BalanceViewerColorScheme,
@@ -70,7 +69,6 @@ export class AccountDetailsPageComponent {
 
   private accountService = inject(AccountService);
   private authStateService = inject(AuthStateService);
-  private firebaseService = inject(FirebaseService);
   private router = inject(Router);
   dialog = inject(Dialog);
 
@@ -79,7 +77,6 @@ export class AccountDetailsPageComponent {
   currentRusbeUser = this.accountService.currentUser;
   authState = this.authStateService.accountAuthState;
   accountData = this.authStateService.generalGoodsAccountData;
-  currentFirebaseUser = this.firebaseService.currentUser;
   plainTextPassword = signal<string | undefined>(undefined);
 
   AccountAuthState = AccountAuthState;
@@ -97,9 +94,9 @@ export class AccountDetailsPageComponent {
   });
 
   authUserQueryParam = computed(() => {
-    if (!this.currentFirebaseUser()) return '';
+    if (!this.currentRusbeUser()) return '';
 
-    return `?authuser=${this.currentFirebaseUser()?.email}`;
+    return `?authuser=${this.currentRusbeUser()?.email}`;
   });
 
   async refreshCredentials() {
