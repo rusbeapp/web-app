@@ -32,6 +32,7 @@ import {
   AccountAuthState,
   AuthStateService,
 } from '@rusbe/services/auth-state/auth-state.service';
+import { FirebaseService } from '@rusbe/services/firebase/firebase.service';
 
 import {
   BalanceViewerColorScheme,
@@ -69,14 +70,16 @@ export class AccountDetailsPageComponent {
 
   private accountService = inject(AccountService);
   private authStateService = inject(AuthStateService);
+  private firebaseService = inject(FirebaseService);
   private router = inject(Router);
   dialog = inject(Dialog);
 
   @ViewChild('confirmDialog') confirmDialogTemplate!: TemplateRef<Element>;
 
-  currentUser = this.accountService.currentUser;
+  currentRusbeUser = this.accountService.currentUser;
   authState = this.authStateService.accountAuthState;
   accountData = this.authStateService.generalGoodsAccountData;
+  currentFirebaseUser = this.firebaseService.currentUser;
   plainTextPassword = signal<string | undefined>(undefined);
 
   AccountAuthState = AccountAuthState;
@@ -91,6 +94,12 @@ export class AccountDetailsPageComponent {
 
     // Mask 3 first digits and 2 last digits
     return `•••.${accountData.cpfNumber.slice(3, 6)}.${accountData.cpfNumber.slice(6, 9)}-••`;
+  });
+
+  authUserQueryParam = computed(() => {
+    if (!this.currentFirebaseUser()) return '';
+
+    return `?authuser=${this.currentFirebaseUser()?.email}`;
   });
 
   async refreshCredentials() {

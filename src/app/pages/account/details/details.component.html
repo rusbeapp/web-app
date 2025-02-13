@@ -12,7 +12,7 @@
         <rusbe-user-avatar class="h-12 w-12 sm:h-16 sm:w-16" />
         <div class="flex flex-col">
           <p class="text-condensed text-lg sm:text-2xl">
-            {{ currentUser()?.displayName }}
+            {{ currentRusbeUser()?.displayName }}
           </p>
           <p class="font-geometric tabular-nums">{{ maskedCPF() }}</p>
         </div>
@@ -110,7 +110,9 @@
 
         <a
           class="grouping-card-strip-button block w-full"
-          href="https://myaccount.google.com/personal-info"
+          href="https://myaccount.google.com/personal-info{{
+            authUserQueryParam()
+          }}"
           target="_blank"
           rel="noopener noreferrer"
         >
