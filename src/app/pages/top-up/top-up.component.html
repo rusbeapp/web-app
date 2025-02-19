@@ -1,0 +1,42 @@
+<div class="p-safe">
+  <div class="reduced-page-container p-4">
+    <rusbe-header [type]="HEADER_TYPE"> ADICIONAR CRÉDITOS </rusbe-header>
+  </div>
+
+  <div class="reduced-page-container">
+    <main class="grouping-cards-container my-2 sm:my-4">
+      @if (true) {
+        <section rusbe-card-group [title]="'PELO APP'">
+          @for (transactionType of appTransactionTypes; track $index) {
+            <button
+              rusbe-card-button
+              [subtitle]="TRANSACTION_TYPE_MESSAGES[transactionType]"
+              (click)="(null)"
+            >
+              {{ transactionType }}
+            </button>
+          }
+        </section>
+
+        <section rusbe-card-group [title]="'PRESENCIALMENTE NO GUICHÊ'">
+          @for (transactionType of inLocoTransactionTypes; track $index) {
+            <button
+              rusbe-card-button
+              [subtitle]="'Dirija-se ao guichê para completar a compra.'"
+              (click)="(null)"
+            >
+              {{ transactionType }}
+            </button>
+          }
+        </section>
+      } @else {
+        <div
+          class="grouping-card flex h-80 flex-col items-center justify-center sm:h-96"
+        >
+          <!-- <rusbe-spinner class="h-8 w-8 text-accent"></rusbe-spinner> -->
+          <p class="pt-2 text-base sm:pt-4 sm:text-xl">Um momento...</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>

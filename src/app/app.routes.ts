@@ -85,6 +85,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'top-up',
+    loadComponent: () =>
+      import('./pages/top-up/top-up.component').then((m) => m.TopUpComponent),
+  },
+  {
     path: '404',
     loadComponent: () =>
       import('./pages/error/error.component').then((m) => m.ErrorPageComponent),

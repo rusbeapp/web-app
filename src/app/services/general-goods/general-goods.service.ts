@@ -545,4 +545,5 @@ export enum GeneralGoodsBalanceType {
 
 export enum GeneralGoodsTransactionType {
   Pix = 'Pix',
+  CreditCard = 'Cartão de crédito',
 }

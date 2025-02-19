@@ -1,0 +1,48 @@
+<div class="p-safe">
+  <div class="reduced-page-container p-4">
+    <rusbe-header [type]="HEADER_TYPE"> ADICIONAR CRÉDITOS </rusbe-header>
+  </div>
+
+  <div class="reduced-page-container">
+    <main class="grouping-cards-container my-2 sm:my-4">
+      @if (true) {
+        <section class="grouping-card">
+          <h2 class="grouping-card-title px-responsive">PELO APP</h2>
+          @for (transactionType of appTransactionTypes(); track $index) {
+            <button class="grouping-card-strip-button w-full" (click)="(null)">
+              <div class="grouping-card-strip-button-inner">
+                <ng-icon
+                  class="min-w-fit"
+                  name="lucideEraser"
+                  aria-hidden="true"
+                ></ng-icon>
+                <div class="w-full text-overlay-contrast">
+                  <h3>{{ transactionType }}</h3>
+                  <p class="my-1 text-xs font-normal sm:text-base">
+                    {{ TRANSACTION_TYPE_MESSAGES[transactionType] }}
+                  </p>
+                </div>
+                <ng-icon
+                  class="min-w-fit"
+                  name="lucideChevronRight"
+                  aria-hidden="true"
+                ></ng-icon>
+              </div>
+            </button>
+          }
+        </section>
+
+        <section class="grouping-card px-responsive">
+          <h2 class="grouping-card-title">PRESENCIALMENTE NO GUICHÊ</h2>
+        </section>
+      } @else {
+        <div
+          class="grouping-card flex h-80 flex-col items-center justify-center sm:h-96"
+        >
+          <!-- <rusbe-spinner class="h-8 w-8 text-accent"></rusbe-spinner> -->
+          <p class="pt-2 text-base sm:pt-4 sm:text-xl">Um momento...</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>
