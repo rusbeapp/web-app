@@ -1,41 +1,50 @@
-<div class="p-safe">
-  <div class="reduced-page-container p-4">
-    <rusbe-header [type]="HEADER_TYPE"> ADICIONAR CRÉDITOS </rusbe-header>
-  </div>
+<div class="p-safe h-svh overflow-auto lg:ml-60">
+  <div class="flex h-full flex-col items-start justify-start">
+    <div class="reduced-page-container w-full p-4">
+      <rusbe-header
+        [customAction]="goToPreviousStage.bind(this)"
+        [type]="HEADER_TYPE"
+      >
+        ADICIONAR CRÉDITOS
+      </rusbe-header>
+    </div>
 
-  <div class="reduced-page-container">
-    <main class="grouping-cards-container my-2 sm:my-4">
-      @if (true) {
-        <section rusbe-card-group [title]="'PELO APP'">
-          @for (transactionType of appTransactionTypes; track $index) {
-            <button
-              rusbe-card-button
-              [subtitle]="TRANSACTION_TYPE_MESSAGES[transactionType]"
-              (click)="(null)"
-            >
-              {{ transactionType }}
-            </button>
-          }
-        </section>
+    @if (STAGE_MESSAGE[currentStage()]) {
+      <div class="reduced-page-container w-full p-4">
+        <p class="text-balance text-2xl sm:text-3xl">
+          <strong>{{ STAGE_MESSAGE[currentStage()] }}</strong>
+        </p>
+      </div>
+    }
 
-        <section rusbe-card-group [title]="'PRESENCIALMENTE NO GUICHÊ'">
-          @for (transactionType of inLocoTransactionTypes; track $index) {
-            <button
-              rusbe-card-button
-              [subtitle]="'Dirija-se ao guichê para completar a compra.'"
-              (click)="(null)"
-            >
-              {{ transactionType }}
-            </button>
-          }
-        </section>
-      } @else {
-        <div
-          class="grouping-card flex h-80 flex-col items-center justify-center sm:h-96"
-        >
-          <!-- <rusbe-spinner class="h-8 w-8 text-accent"></rusbe-spinner> -->
-          <p class="pt-2 text-base sm:pt-4 sm:text-xl">Um momento...</p>
-        </div>
+    <main class="reduced-page-container flex w-full flex-grow">
+      @if (!valueSubmitted()) {
+        <rusbe-top-up-calculator
+          [(value)]="value"
+          (submitted)="onCalculatorConfirm($event)"
+        ></rusbe-top-up-calculator>
+      } @else if (!paymentLocation() && !paymentMethod()) {
+        <rusbe-top-up-payment-method
+          (paymentMethodChanged)="onPaymentMethodChange($event)"
+          (paymentLocationChanged)="onPaymentLocaltionChange($event)"
+        ></rusbe-top-up-payment-method>
+      } @else if (paymentLocation() !== 'InApp' && paymentMethod()) {
+        <rusbe-top-up-in-loco-helper
+          [cpf]="cpf()"
+          [name]="name()"
+          [topUpValue]="value()"
+          [paymentMethod]="paymentMethod()"
+          (backClicked)="goToHome()"
+        ></rusbe-top-up-in-loco-helper>
+      } @else if (paymentMethod() === 'Pix') {
+        <rusbe-top-up-pix
+          [cpf]="cpf()"
+          [name]="name()"
+          [topUpValue]="value()"
+          [pixCode]="pixCode"
+        ></rusbe-top-up-pix>
+      } @else if (paymentMethod() === 'Cartão de crédito') {
+        <rusbe-top-up-credit-card></rusbe-top-up-credit-card>
       }
     </main>
   </div>

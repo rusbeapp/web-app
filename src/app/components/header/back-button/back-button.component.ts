@@ -15,12 +15,16 @@ import { ButtonColorScheme } from '@rusbe/components/header/button-color-scheme'
 })
 export class BackButtonComponent {
   colorScheme = input<ButtonColorScheme>(ButtonColorScheme.Page);
+  customAction = input<(() => boolean) | null>(null);
   ButtonColorScheme = ButtonColorScheme;
 
   router = inject(Router);
   location = inject(Location);
 
   goBack() {
+    const customAction = this.customAction()?.();
+    if (customAction) return;
+
     if (this.router.lastSuccessfulNavigation?.previousNavigation != null) {
       this.location.back();
     } else {

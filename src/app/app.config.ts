@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
@@ -24,6 +24,8 @@ import {
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+import { provideNgIconLoader } from '@ng-icons/core';
 
 import { routes } from '@rusbe/app.routes';
 import { environment } from '@rusbe/environments/environment';
@@ -69,5 +71,9 @@ export const appConfig: ApplicationConfig = {
     }),
     ScreenTrackingService,
     UserTrackingService,
+    provideNgIconLoader((name) => {
+      const http = inject(HttpClient);
+      return http.get(`/assets/icons/${name}.svg`, { responseType: 'text' });
+    }),
   ],
 };

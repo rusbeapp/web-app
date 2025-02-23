@@ -1,0 +1,104 @@
+@if (false) {
+  <div class="grouping-cards-container my-2 sm:my-4">
+    <section rusbe-card-group [title]="'PAGAR COM PIX'">
+      <div class="px-responsive flex w-full flex-col gap-5">
+        <div>
+          <div class="inline-flex gap-4">
+            <p class="text-2xl">R$</p>
+            <p class="font-geometric text-2xl">
+              <strong> {{ parsedTopUpValue() }}</strong>
+            </p>
+          </div>
+        </div>
+
+        <p class="break-all">
+          {{ pixCode() }}
+        </p>
+
+        <div class="flex flex-col gap-3">
+          <button
+            (click)="(null)"
+            class="button-split px-responsive bg-accent text-accent-contrast focus:ring-offset-background"
+          >
+            Copiar código
+            <ng-icon
+              class="color-accent-contrast min-w-fit"
+              name="lucideCopy"
+              aria-hidden="true"
+            ></ng-icon>
+          </button>
+          <button
+            (click)="(null)"
+            class="button-split px-responsive bg-accent-contrast text-accent focus:ring-offset-background"
+          >
+            Mostrar código QR Pix
+            <ng-icon
+              class="color-accent-contrast min-w-fit"
+              name="lucideScanQrCode"
+              aria-hidden="true"
+            ></ng-icon>
+          </button>
+        </div>
+
+        <p>
+          Realize o pagamento usando o app do banco ou instituição financeira de
+          sua preferência. A transação pode levar alguns minutos para ser
+          processada.
+        </p>
+
+        <div class="flex items-center gap-2">
+          <ng-icon
+            class="color-accent-contrast min-w-fit"
+            name="lucideCalendarDays"
+            aria-hidden="true"
+          ></ng-icon>
+          <p>
+            <strong>{{ formatedDate }}</strong>
+          </p>
+        </div>
+        <div
+          class="grid min-w-fit auto-cols-max grid-flow-col grid-rows-2 gap-x-2"
+        >
+          <div class="row-span-2 grid items-center">
+            <ng-icon
+              class="color-accent-contrast min-w-fit"
+              name="lucideUserRound"
+              aria-hidden="true"
+            ></ng-icon>
+          </div>
+          <div class="col-span-1 row-span-1 grid">
+            <p class="w-fit">
+              <strong>{{ parsedCpf() }}</strong>
+            </p>
+          </div>
+          <div class="col-span-1 row-span-1 grid">
+            <p class="w-auto">
+              <strong>{{ name() }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="px-responsive flex flex-col gap-5">
+      <p>
+        <strong
+          >Sempre verifique se o destinatário do seu pagamento corresponde à
+          General Goods.</strong
+        >
+      </p>
+      <p>
+        Esta transação é feita diretamente à General Goods, e o Rusbé não
+        recebe, processa ou armazena dados de pagamento. A General Goods é
+        responsável por processar seu pagamento e pelas informações de créditos
+        e recarga mostradas.
+      </p>
+    </div>
+  </div>
+} @else {
+  <div
+    class="grouping-card flex h-full w-full flex-col items-center justify-center sm:h-96"
+  >
+    <rusbe-spinner class="h-8 w-8 text-accent"></rusbe-spinner>
+    <p class="pt-2 text-base sm:pt-4 sm:text-xl">Gerando código pix...</p>
+  </div>
+}

@@ -1,0 +1,46 @@
+<section
+  class="reduced-page-container flex w-full flex-grow flex-col rounded-t-3xl bg-overlay-contrast p-4 pt-9 [&_p]:text-accent-contrast"
+>
+  <div class="flex flex-grow flex-col gap-10">
+    <div class="h-6 text-base text-accent-contrast sm:h-8">
+      <rusbe-logo></rusbe-logo>
+    </div>
+    <div>
+      <p class="text-base">Dados pessoais</p>
+      <p class="text-balance text-4xl">
+        <strong>{{ parsedCpf() }}</strong>
+      </p>
+      <p class="text-condensed text-2xl">
+        <strong>{{ name() }}</strong>
+      </p>
+    </div>
+    <div>
+      <p class="text-base">Valor da Recarga</p>
+      <div class="inline-flex gap-4">
+        <p class="text-4xl">R$</p>
+        <p class="font-geometric text-4xl">
+          <strong>{{ parsedValue() }}</strong>
+        </p>
+      </div>
+    </div>
+    <div>
+      <p class="text-base">Forma de pagamento</p>
+      <div class="inline-flex gap-4">
+        <p class="font-geometric text-4xl">
+          <strong>{{ paymentMethod() }}</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+  <button
+    (click)="onBackClicked()"
+    class="button-large button-split px-responsive bg-accent text-accent-contrast focus:ring-offset-background"
+  >
+    Voltar
+    <ng-icon
+      class="color-accent-contrast min-w-fit"
+      name="lucideMoveRight"
+      aria-hidden="true"
+    ></ng-icon>
+  </button>
+</section>

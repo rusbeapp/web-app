@@ -1,0 +1,49 @@
+<section class="reduced-page-container flex w-full flex-grow p-4">
+  <form
+    class="relative flex w-full flex-col gap-2"
+    (ngSubmit)="onSubmitValue()"
+  >
+    <span class="absolute start-6 top-[43px] font-grotesque text-4xl">R$</span>
+    <input
+      class="block w-full rounded-lg border-transparent bg-overlay p-10 pb-4 pl-[84px] font-geometric text-4xl font-bold shadow-lg placeholder:text-transparent autofill:pb-4 autofill:pt-10 focus:border-accent focus:pb-4 focus:pt-10 focus:ring-accent disabled:pointer-events-none disabled:opacity-50"
+      inputmode="numeric"
+      type="text"
+      name="top-up-value"
+      id="top-up-calculator-currency-input"
+      aria-errormessage="currency-input-error"
+      [currencyMask]="maskConfig"
+      [formControl]="topUpValue"
+      [disabled]="inputDisabled()"
+      [(ngModel)]="value"
+    />
+    <label
+      for="top-up-calculator-currency-input"
+      class="text-md pointer-events-none absolute start-6 top-4 origin-[0_0] truncate border border-transparent transition duration-100 ease-in-out"
+      >Valor</label
+    >
+    @if (topUpValue.touched && topUpValue.hasError('lowTopUpValue')) {
+      <rusbe-warning-card class="transition-appear"
+        ><p>
+          O valor da recarga deve ser no mínimo R$ 1,00
+        </p></rusbe-warning-card
+      >
+    } @else if (topUpValue.touched && topUpValue.hasError('highTopUpValue')) {
+      <rusbe-warning-card class="transition-appear"
+        ><p>
+          O valor da recarga deve ser no máximo R$ 100,00
+        </p></rusbe-warning-card
+      >
+    }
+  </form>
+</section>
+<section *ngIf="false" class="grouping-card px-responsive">
+  <rusbe-meal-balance-breakdown></rusbe-meal-balance-breakdown>
+</section>
+<section class="reduced-page-container w-full p-4">
+  <button
+    (click)="onSubmitValue()"
+    class="button-fill button-full button-large focus:ring-offset-background"
+  >
+    Confirmar
+  </button>
+</section>

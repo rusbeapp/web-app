@@ -1,5 +1,13 @@
 <div class="grouping-card-strip-button-inner">
-  <ng-icon class="min-w-fit" name="lucideEraser" aria-hidden="true"></ng-icon>
+  @if (iconName()) {
+    <ng-icon
+      class="min-w-fit fill-accent"
+      [name]="iconName()"
+      aria-hidden="true"
+    ></ng-icon>
+  } @else {
+    <div></div>
+  }
   <div class="w-full text-overlay-contrast">
     <h3><ng-content></ng-content></h3>
     <p class="my-1 text-xs font-normal sm:text-base">
