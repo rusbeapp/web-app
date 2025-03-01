@@ -41,7 +41,7 @@
           [cpf]="cpf()"
           [name]="name()"
           [topUpValue]="value()"
-          [pixCode]="pixCode"
+          [pixTransactionData]="pixTransactionData()"
         ></rusbe-top-up-pix>
       } @else if (paymentMethod() === 'Cartão de crédito') {
         <rusbe-top-up-credit-card></rusbe-top-up-credit-card>

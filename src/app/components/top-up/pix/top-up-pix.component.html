@@ -1,4 +1,4 @@
-@if (false) {
+@if (pixTransactionData()) {
   <div class="grouping-cards-container my-2 sm:my-4">
     <section rusbe-card-group [title]="'PAGAR COM PIX'">
       <div class="px-responsive flex w-full flex-col gap-5">
@@ -12,7 +12,7 @@
         </div>
 
         <p class="break-all">
-          {{ pixCode() }}
+          {{ pixTransactionData()?.qrCodeString }}
         </p>
 
         <div class="flex flex-col gap-3">

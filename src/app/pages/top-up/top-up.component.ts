@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   signal,
   viewChild,
@@ -23,6 +24,11 @@ import {
 } from '@rusbe/components/top-up/payment-method/payment-method.component';
 import { TopUpPixComponent } from '@rusbe/components/top-up/pix/top-up-pix.component';
 import { AuthStateService } from '@rusbe/services/auth-state/auth-state.service';
+import {
+  GeneralGoodsPixTransactionData,
+  GeneralGoodsService,
+} from '@rusbe/services/general-goods/general-goods.service';
+import { BrlCurrency } from '@rusbe/types/brl-currency';
 
 @Component({
   selector: 'rusbe-top-up',
@@ -75,16 +81,30 @@ export class TopUpComponent {
   paymentLocation = signal<PaymentLocation | null>(null);
   pixCode =
     '00020126580014br.gov.bcb.pix0136bee05743-4291-4f3c-9259-595df1307ba1520400005303986540510.005802BR5914AlexandreLima6019Presidente Prudente62180514Um-Id-Qualquer6304D475';
+  pixTransactionData = signal<GeneralGoodsPixTransactionData | null>(null);
 
   name = computed(
     () => this.authStateService.generalGoodsAccountData()?.fullName ?? '',
   );
 
   private readonly router = inject(Router);
+  private readonly generalGoodsService = inject(GeneralGoodsService);
   private readonly authStateService = inject(AuthStateService);
   cpf = computed(
     () => this.authStateService.generalGoodsAccountData()?.cpfNumber ?? '',
   );
+
+  constructor() {
+    effect(async () => {
+      if (this.pixComponent()) {
+        const pixData =
+          await this.generalGoodsService.startAddCreditsTransactionUsingPix(
+            BrlCurrency.fromNumber(parseFloat(this.value())),
+          );
+        this.pixTransactionData.set(pixData);
+      }
+    });
+  }
 
   goToPreviousStage(): boolean {
     switch (this.currentStage()) {

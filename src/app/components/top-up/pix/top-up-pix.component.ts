@@ -15,6 +15,7 @@ import {
 
 import { CardGroupComponent } from '@rusbe/components/cards/card-group/card-group.component';
 import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
+import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/general-goods.service';
 
 @Component({
   selector: 'rusbe-top-up-pix',
@@ -35,9 +36,10 @@ import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
 })
 export class TopUpPixComponent {
   topUpValue = input.required<string>();
-  pixCode = input.required<string>();
   cpf = input.required<string>();
   name = input.required<string>();
+
+  pixTransactionData = input<GeneralGoodsPixTransactionData | null>();
 
   parsedTopUpValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
 
