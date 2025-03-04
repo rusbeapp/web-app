@@ -59,7 +59,7 @@ export class TopUpComponent {
     [TopUpStages.Pix]: '',
     [TopUpStages.CreditCard]: '',
   };
-  readonly FIFHTEEEN_MINUTES = 15 * 1000;
+  readonly FIFHTEEEN_MINUTES = 15 * 60 * 1000;
 
   calculatorComponent = viewChild(TopUpCalculatorComponent);
   paymentMethodComponent = viewChild(TopUpPaymentMethodComponent);
