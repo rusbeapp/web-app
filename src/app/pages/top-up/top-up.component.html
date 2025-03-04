@@ -37,7 +37,7 @@
           (paymentMethodChanged)="onPaymentMethodChange($event)"
           (paymentLocationChanged)="onPaymentLocaltionChange($event)"
         ></rusbe-top-up-payment-method>
-      } @else if (paymentLocation() !== 'InApp' && paymentMethod()) {
+      } @else if (paymentLocation() === 'InLoco') {
         <rusbe-top-up-in-loco-helper
           [cpf]="accountData().cpfNumber"
           [name]="accountData().fullName"
