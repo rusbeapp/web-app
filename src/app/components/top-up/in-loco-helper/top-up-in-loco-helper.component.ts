@@ -35,15 +35,16 @@ export class TopUpInLocoHelperComponent {
   topUpValue = input.required<string>();
   paymentMethod = input.required<PaymentMethods | null>();
 
-  parsedCpf = computed(() => {
-    const cpfNumber = this.cpf();
-    if (!cpfNumber) return '';
-    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  });
-
+  parsedCpf = computed(this.parseCpfNumber.bind(this));
   parsedValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
 
   onBackClicked(): void {
     this.backClicked.emit();
+  }
+
+  private parseCpfNumber(): string {
+    const cpfNumber = this.cpf();
+    if (!cpfNumber) return '';
+    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   }
 }

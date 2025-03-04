@@ -40,19 +40,24 @@ import { WarningCardComponent } from '@rusbe/components/warning-card/warning-car
 export class TopUpCalculatorComponent {
   submitted = output<boolean>();
 
-  inputDisabled = signal(false);
   value = model.required<string>();
+
+  inputDisabled = signal(false);
 
   readonly topUpValue = new FormControl(
     { value: '0', disabled: this.inputDisabled() },
     {
-      validators: [Validators.required, lowTopUpValue, highTopUpValue],
+      validators: [
+        Validators.required,
+        lowTopUpValueValidator,
+        highTopUpValueValidator,
+      ],
     },
   );
 
   readonly maskConfig = {
     align: 'left',
-    allowNegative: true,
+    allowNegative: false,
     allowZero: true,
     decimal: ',',
     precision: 2,
@@ -72,14 +77,14 @@ export class TopUpCalculatorComponent {
   }
 }
 
-const lowTopUpValue: ValidatorFn = (
+const lowTopUpValueValidator: ValidatorFn = (
   control: AbstractControl,
 ): ValidationErrors | null => {
   const value = control.value;
   return value < 1 ? { lowTopUpValue: true } : null;
 };
 
-const highTopUpValue: ValidatorFn = (
+const highTopUpValueValidator: ValidatorFn = (
   control: AbstractControl,
 ): ValidationErrors | null => {
   const value = control.value;

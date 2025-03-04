@@ -40,6 +40,9 @@ import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/ge
   },
 })
 export class TopUpPixComponent {
+  readonly CURRENT_DATE = new Date();
+  readonly LOCALIZED_CURRENT_DATE = this.parseCurrentDate();
+
   topUpValue = input.required<string>();
   cpf = input.required<string>();
   name = input.required<string>();
@@ -62,6 +65,16 @@ export class TopUpPixComponent {
 
   showPixQrCode = signal(false);
 
-  readonly today = new Date();
-  readonly formatedDate = `${this.today.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}, ${Intl.DateTimeFormat('pt-BR', { hour: 'numeric', minute: 'numeric' }).format(this.today)}`;
+  private parseCurrentDate(): string {
+    const dateString = this.CURRENT_DATE.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+    const timeString = Intl.DateTimeFormat('pt-BR', {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(this.CURRENT_DATE);
+    return `${dateString}, ${timeString}`;
+  }
 }
