@@ -15,12 +15,11 @@ import {
 
 import { CardButtonComponent } from '@rusbe/components/cards/card-button/card-button.component';
 import { CardGroupComponent } from '@rusbe/components/cards/card-group/card-group.component';
-import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
 import { GeneralGoodsTransactionType } from '@rusbe/services/general-goods/general-goods.service';
 
 @Component({
   selector: 'rusbe-top-up-payment-method',
-  imports: [CardGroupComponent, CardButtonComponent, SpinnerComponent],
+  imports: [CardGroupComponent, CardButtonComponent],
   templateUrl: './payment-method.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [

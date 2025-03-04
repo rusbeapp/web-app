@@ -1,7 +1,9 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   signal,
 } from '@angular/core';
@@ -49,13 +51,22 @@ export class TopUpPixComponent {
   timeLeft = input.required<string>();
 
   pixTransactionData = input<GeneralGoodsPixTransactionData | null>();
-  pixErrorMessage = input<string>('');
 
   pixQrCodeSource = computed(() => this.parseBase64ImageSource());
   parsedTopUpValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
   parsedCpf = computed(() => this.parseCpfNumber());
 
-  showPixQrCode = signal(false);
+  showPixQrCode = signal<boolean>(false);
+  copiedToClipboard = signal<boolean>(false);
+
+  private readonly clipboard = inject(Clipboard);
+
+  copyPasswordToClipboard() {
+    const pixTransactionData = this.pixTransactionData();
+    if (!pixTransactionData) return;
+    this.clipboard.copy(pixTransactionData.qrCodeString);
+    this.copiedToClipboard.set(true);
+  }
 
   private parseCurrentDate(): string {
     const dateString = this.CURRENT_DATE.toLocaleDateString('pt-BR', {
@@ -79,6 +90,6 @@ export class TopUpPixComponent {
   private parseCpfNumber(): string {
     const cpfNumber = this.cpf();
     if (!cpfNumber) return '';
-    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '•••.•••.$3-$4');
+    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '•••.$2.$3-••');
   }
 }

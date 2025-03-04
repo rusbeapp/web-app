@@ -12,10 +12,14 @@ import { Router } from '@angular/router';
 
 import { interval, takeUntil, timer } from 'rxjs';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideInfo } from '@ng-icons/lucide';
+
 import {
   HeaderComponent,
   HeaderType,
 } from '@rusbe/components/header/header.component';
+import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
 import { TopUpCalculatorComponent } from '@rusbe/components/top-up/calculator/top-up-calculator.component';
 import { TopUpCreditCardComponent } from '@rusbe/components/top-up/credit-card/top-up-credit-card.component';
 import { TopUpInLocoHelperComponent } from '@rusbe/components/top-up/in-loco-helper/top-up-in-loco-helper.component';
@@ -46,18 +50,34 @@ import { RusbeError } from '@rusbe/types/error-handling';
     TopUpPixComponent,
     TopUpCreditCardComponent,
     TopUpInLocoHelperComponent,
+    SpinnerComponent,
+    NgIcon,
   ],
   templateUrl: './top-up.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideInfo,
+    }),
+  ],
 })
 export class TopUpComponent {
   readonly HEADER_TYPE = HeaderType.PageNameWithBackButton;
   readonly STAGE_MESSAGE = {
-    [TopUpStages.Calculator]: 'Quanto você quer adicionar?',
-    [TopUpStages.PaymentMethod]: 'Como você deseja adicionar créditos?',
-    [TopUpStages.InLocoHelper]: 'No guichê, mostre essas informações',
-    [TopUpStages.Pix]: '',
-    [TopUpStages.CreditCard]: '',
+    [TopUpStage.Calculator]: 'Quanto você quer adicionar?',
+    [TopUpStage.PaymentMethod]: 'Como você deseja adicionar créditos?',
+    [TopUpStage.InLocoHelper]: 'No guichê, mostre essas informações',
+    [TopUpStage.Pix]: '',
+    [TopUpStage.CreditCard]: '',
+    error: '',
+  };
+  readonly ERROR_MESSAGES = {
+    [TopUpError.GeneralGoodsUnavailable]:
+      'Infelizmente, o sistema da General Goods está fora do ar.',
+    [TopUpError.PixUnavailable]:
+      'Ocorreu um erro ao tentar gerar o código pix.',
+    [TopUpError.Generic]:
+      'Ocorreu um erro desconhecido. Por favor, tente novamente.',
   };
   readonly FIFHTEEEN_MINUTES = 15 * 60 * 1000;
 
@@ -72,7 +92,7 @@ export class TopUpComponent {
   paymentMethod = signal<PaymentMethods | null>(null);
   paymentLocation = signal<PaymentLocation | null>(null);
   pixTransactionData = signal<GeneralGoodsPixTransactionData | null>(null);
-  pixErrorMessage = signal('');
+  currentError = signal<TopUpError | null>(null);
   remainingTimeString = signal(this.parseRemainingTime(0));
 
   accountData = computed(() => {
@@ -84,7 +104,6 @@ export class TopUpComponent {
       cpfNumber: accountData.cpfNumber,
     };
   });
-
   currentStage = computed(() => {
     if (this.calculatorComponent()) {
       return 'calculator';
@@ -97,14 +116,10 @@ export class TopUpComponent {
     } else if (this.pixComponent()) {
       return 'pix';
     }
-    return 'calculator';
+    return 'error';
   });
 
-  topUpUnavailable = computed(() => {
-    const accountAuthState = this.authStateService.accountAuthState();
-
-    return accountAuthState === AccountAuthState.GeneralGoodsServiceUnavailable;
-  });
+  accountAuthState = computed(() => this.authStateService.accountAuthState());
 
   private readonly router = inject(Router);
   private readonly generalGoodsService = inject(GeneralGoodsService);
@@ -113,6 +128,14 @@ export class TopUpComponent {
   constructor() {
     effect(() => {
       if (this.pixComponent()) this.startPixTransaction();
+    });
+
+    effect(() => {
+      if (this.accountAuthState() === AccountAuthState.LoggedIn) {
+        this.currentError.set(null);
+      } else {
+        this.currentError.set(TopUpError.GeneralGoodsUnavailable);
+      }
     });
   }
 
@@ -129,6 +152,8 @@ export class TopUpComponent {
         this.paymentLocation.set(null);
         this.paymentMethod.set(null);
         return true;
+      case 'error':
+        return false;
       default:
         return false;
     }
@@ -136,6 +161,14 @@ export class TopUpComponent {
 
   goToHome() {
     this.router.navigate(['/']);
+  }
+
+  retry(): void {
+    if (this.currentError() === TopUpError.GeneralGoodsUnavailable) {
+      this.authStateService.updateAccountAuthState();
+    } else if (this.currentError() === TopUpError.PixUnavailable) {
+      this.currentError.set(null);
+    }
   }
 
   onPaymentMethodChange(paymentMethod: PaymentMethods) {
@@ -161,14 +194,10 @@ export class TopUpComponent {
       this.startPixTimer();
     } catch (error) {
       if (error instanceof RusbeError) {
-        this.pixErrorMessage.set(
-          'Ocorreu um erro ao tentar gerar o código pix.',
-        );
+        this.currentError.set(TopUpError.PixUnavailable);
         return;
       }
-      this.pixErrorMessage.set(
-        'Ocorreu um erro desconhecido. Por favor, tente novamente.',
-      );
+      this.currentError.set(TopUpError.Generic);
     }
   }
 
@@ -195,10 +224,16 @@ export class TopUpComponent {
   }
 }
 
-export enum TopUpStages {
+export enum TopUpStage {
   Calculator = 'calculator',
   PaymentMethod = 'payment-method',
   Pix = 'pix',
   CreditCard = 'credit-card',
   InLocoHelper = 'in-loco-helper',
+}
+
+enum TopUpError {
+  GeneralGoodsUnavailable = 'general-goods-unavailable',
+  PixUnavailable = 'pix-unavailable',
+  Generic = 'generic-error',
 }
