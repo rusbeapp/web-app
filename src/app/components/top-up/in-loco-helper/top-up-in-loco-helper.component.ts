@@ -35,7 +35,7 @@ export class TopUpInLocoHelperComponent {
   topUpValue = input.required<string>();
   paymentMethod = input.required<PaymentMethods | null>();
 
-  parsedCpf = computed(this.parseCpfNumber.bind(this));
+  parsedCpf = computed(() => this.parseCpfNumber());
   parsedValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
 
   onBackClicked(): void {

@@ -51,17 +51,9 @@ export class TopUpPixComponent {
   pixTransactionData = input<GeneralGoodsPixTransactionData | null>();
   pixErrorMessage = input<string>('');
 
-  pixQrCodeSource = computed(() => {
-    const pixTransactionData = this.pixTransactionData();
-    if (!pixTransactionData) return '';
-    return `data:image/png;base64, ${pixTransactionData.qrCodeBase64Image}`;
-  });
+  pixQrCodeSource = computed(() => this.parseBase64ImageSource());
   parsedTopUpValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
-  parsedCpf = computed(() => {
-    const cpfNumber = this.cpf();
-    if (!cpfNumber) return '';
-    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '•••.•••.$3-$4');
-  });
+  parsedCpf = computed(() => this.parseCpfNumber());
 
   showPixQrCode = signal(false);
 
@@ -76,5 +68,17 @@ export class TopUpPixComponent {
       minute: 'numeric',
     }).format(this.CURRENT_DATE);
     return `${dateString}, ${timeString}`;
+  }
+
+  private parseBase64ImageSource(): string {
+    const pixTransactionData = this.pixTransactionData();
+    if (!pixTransactionData) return '';
+    return `data:image/png;base64, ${pixTransactionData.qrCodeBase64Image}`;
+  }
+
+  private parseCpfNumber(): string {
+    const cpfNumber = this.cpf();
+    if (!cpfNumber) return '';
+    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '•••.•••.$3-$4');
   }
 }
