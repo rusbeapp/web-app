@@ -13,4 +13,5 @@ import { NgIcon } from '@ng-icons/core';
 export class CardButtonComponent {
   subtitle = input('');
   iconName = input('');
+  badgeText = input('');
 }

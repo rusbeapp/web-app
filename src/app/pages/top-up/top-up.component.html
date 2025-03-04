@@ -9,7 +9,7 @@
       </rusbe-header>
     </div>
 
-    @if (STAGE_MESSAGE[currentStage()]) {
+    @if (!topUpUnavailable() && STAGE_MESSAGE[currentStage()]) {
       <div class="reduced-page-container w-full p-4">
         <p class="text-balance text-2xl sm:text-3xl">
           <strong>{{ STAGE_MESSAGE[currentStage()] }}</strong>
@@ -18,7 +18,16 @@
     }
 
     <main class="reduced-page-container flex w-full flex-grow">
-      @if (!valueSubmitted()) {
+      @if (topUpUnavailable()) {
+        <div
+          class="transition-appear flex h-full w-full flex-col items-center justify-center gap-2 p-4 sm:gap-4"
+        >
+          <p class="text-base sm:text-xl">
+            Infelizmente, o sistema da General Goods está fora do ar.
+          </p>
+          <p>Por favor, tente novamente mais tarde.</p>
+        </div>
+      } @else if (!valueSubmitted()) {
         <rusbe-top-up-calculator
           [(value)]="value"
           (submitted)="onCalculatorConfirm($event)"
@@ -30,18 +39,20 @@
         ></rusbe-top-up-payment-method>
       } @else if (paymentLocation() !== 'InApp' && paymentMethod()) {
         <rusbe-top-up-in-loco-helper
-          [cpf]="cpf()"
-          [name]="name()"
+          [cpf]="accountData().cpfNumber"
+          [name]="accountData().fullName"
           [topUpValue]="value()"
           [paymentMethod]="paymentMethod()"
           (backClicked)="goToHome()"
         ></rusbe-top-up-in-loco-helper>
       } @else if (paymentMethod() === 'Pix') {
         <rusbe-top-up-pix
-          [cpf]="cpf()"
-          [name]="name()"
+          [cpf]="accountData().cpfNumber"
+          [name]="accountData().fullName"
           [topUpValue]="value()"
+          [timeLeft]="remainingTimeString()"
           [pixTransactionData]="pixTransactionData()"
+          [pixErrorMessage]="pixErrorMessage()"
         ></rusbe-top-up-pix>
       } @else if (paymentMethod() === 'Cartão de crédito') {
         <rusbe-top-up-credit-card></rusbe-top-up-credit-card>

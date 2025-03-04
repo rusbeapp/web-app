@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { interval, takeUntil, timer } from 'rxjs';
+
 import {
   HeaderComponent,
   HeaderType,
@@ -23,12 +25,16 @@ import {
   TopUpPaymentMethodComponent,
 } from '@rusbe/components/top-up/payment-method/payment-method.component';
 import { TopUpPixComponent } from '@rusbe/components/top-up/pix/top-up-pix.component';
-import { AuthStateService } from '@rusbe/services/auth-state/auth-state.service';
+import {
+  AccountAuthState,
+  AuthStateService,
+} from '@rusbe/services/auth-state/auth-state.service';
 import {
   GeneralGoodsPixTransactionData,
   GeneralGoodsService,
 } from '@rusbe/services/general-goods/general-goods.service';
 import { BrlCurrency } from '@rusbe/types/brl-currency';
+import { RusbeError } from '@rusbe/types/error-handling';
 
 @Component({
   selector: 'rusbe-top-up',
@@ -53,12 +59,31 @@ export class TopUpComponent {
     [TopUpStages.Pix]: '',
     [TopUpStages.CreditCard]: '',
   };
+  readonly FIFHTEEEN_MINUTES = 15 * 1000;
 
   calculatorComponent = viewChild(TopUpCalculatorComponent);
   paymentMethodComponent = viewChild(TopUpPaymentMethodComponent);
   inLocoHelperComponent = viewChild(TopUpInLocoHelperComponent);
   creditCardComponent = viewChild(TopUpCreditCardComponent);
   pixComponent = viewChild(TopUpPixComponent);
+
+  valueSubmitted = signal(false);
+  value = signal('0');
+  paymentMethod = signal<PaymentMethods | null>(null);
+  paymentLocation = signal<PaymentLocation | null>(null);
+  pixTransactionData = signal<GeneralGoodsPixTransactionData | null>(null);
+  pixErrorMessage = signal('');
+  remainingTimeString = signal(this.parseRemainingTime(0));
+
+  accountData = computed(() => {
+    const accountData = this.authStateService.generalGoodsAccountData();
+    if (!accountData) return { fullName: '', cpfNumber: '' };
+
+    return {
+      fullName: accountData.fullName,
+      cpfNumber: accountData.cpfNumber,
+    };
+  });
 
   currentStage = computed(() => {
     if (this.calculatorComponent()) {
@@ -75,34 +100,19 @@ export class TopUpComponent {
     return 'calculator';
   });
 
-  valueSubmitted = signal(false);
-  value = signal('0');
-  paymentMethod = signal<PaymentMethods | null>(null);
-  paymentLocation = signal<PaymentLocation | null>(null);
-  pixCode =
-    '00020126580014br.gov.bcb.pix0136bee05743-4291-4f3c-9259-595df1307ba1520400005303986540510.005802BR5914AlexandreLima6019Presidente Prudente62180514Um-Id-Qualquer6304D475';
-  pixTransactionData = signal<GeneralGoodsPixTransactionData | null>(null);
+  topUpUnavailable = computed(() => {
+    const accountAuthState = this.authStateService.accountAuthState();
 
-  name = computed(
-    () => this.authStateService.generalGoodsAccountData()?.fullName ?? '',
-  );
+    return accountAuthState === AccountAuthState.GeneralGoodsServiceUnavailable;
+  });
 
   private readonly router = inject(Router);
   private readonly generalGoodsService = inject(GeneralGoodsService);
   private readonly authStateService = inject(AuthStateService);
-  cpf = computed(
-    () => this.authStateService.generalGoodsAccountData()?.cpfNumber ?? '',
-  );
 
   constructor() {
-    effect(async () => {
-      if (this.pixComponent()) {
-        const pixData =
-          await this.generalGoodsService.startAddCreditsTransactionUsingPix(
-            BrlCurrency.fromNumber(parseFloat(this.value())),
-          );
-        this.pixTransactionData.set(pixData);
-      }
+    effect(() => {
+      if (this.pixComponent()) this.startPixTransaction();
     });
   }
 
@@ -138,6 +148,50 @@ export class TopUpComponent {
 
   onCalculatorConfirm(value: boolean) {
     this.valueSubmitted.set(value);
+  }
+
+  private async startPixTransaction() {
+    try {
+      const pixTransactionResponse =
+        await this.generalGoodsService.startAddCreditsTransactionUsingPix(
+          BrlCurrency.fromNumber(parseFloat(this.value())),
+        );
+      this.pixTransactionData.set(pixTransactionResponse);
+
+      this.startPixTimer();
+    } catch (error) {
+      if (error instanceof RusbeError) {
+        this.pixErrorMessage.set(
+          'Ocorreu um erro ao tentar gerar o código pix.',
+        );
+        return;
+      }
+      this.pixErrorMessage.set(
+        'Ocorreu um erro desconhecido. Por favor, tente novamente.',
+      );
+    }
+  }
+
+  private startPixTimer() {
+    const source = interval(1000);
+
+    const result = source.pipe(takeUntil(timer(this.FIFHTEEEN_MINUTES)));
+
+    result.subscribe({
+      next: (timeSpent) => {
+        this.remainingTimeString.set(this.parseRemainingTime(timeSpent));
+      },
+      complete: () => {
+        this.router.navigate(['/']);
+      },
+    });
+  }
+
+  private parseRemainingTime(timeSpent: number): string {
+    const remainingTime = this.FIFHTEEEN_MINUTES - timeSpent * 1000;
+    const minutes = Math.floor(remainingTime / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 }
 

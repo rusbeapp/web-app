@@ -6,6 +6,7 @@
           rusbe-card-button
           [iconName]="PAYMENT_METHOD_ICONS[paymentMethod]"
           [disabled]="paymentMethod === 'Cartão de crédito'"
+          [badgeText]="paymentMethod === 'Cartão de crédito' ? 'Vem aí!' : ''"
           [subtitle]="PAYMENT_METHOD_MESSAGES[paymentMethod]"
           (click)="handlePaymentMethodSelection(paymentMethod, 'InApp')"
         >

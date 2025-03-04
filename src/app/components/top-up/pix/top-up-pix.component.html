@@ -1,4 +1,30 @@
-@if (pixTransactionData()) {
+@if (pixErrorMessage()) {
+  <div class="grouping-card flex h-full w-full flex-grow flex-col p-4">
+    <div
+      class="flex h-full w-full flex-grow flex-col items-center justify-center gap-3"
+    >
+      <ng-icon
+        class="text-accent"
+        [size]="'16px'"
+        name="lucideInfo"
+        aria-hidden="true"
+      ></ng-icon>
+      <p class="pt-2 text-base sm:pt-4 sm:text-xl">{{ pixErrorMessage() }}</p>
+    </div>
+
+    <button
+      (click)="(null)"
+      class="button-large button-split px-responsive bg-accent text-accent-contrast focus:ring-offset-background"
+    >
+      Tentar novamente
+      <ng-icon
+        class="color-accent-contrast min-w-fit"
+        name="lucideMoveRight"
+        aria-hidden="true"
+      ></ng-icon>
+    </button>
+  </div>
+} @else if (pixTransactionData()) {
   <div class="grouping-cards-container my-2 sm:my-4">
     <section rusbe-card-group [title]="'PAGAR COM PIX'">
       <div class="px-responsive flex w-full flex-col gap-5">
@@ -15,6 +41,10 @@
           {{ pixTransactionData()?.qrCodeString }}
         </p>
 
+        <p class="text-xs">
+          Tempo restante para pagamento: <strong>{{ timeLeft() }}</strong>
+        </p>
+
         <div class="flex flex-col gap-3">
           <button
             (click)="(null)"
@@ -28,10 +58,11 @@
             ></ng-icon>
           </button>
           <button
-            (click)="(null)"
+            (click)="showPixQrCode.set(!showPixQrCode())"
+            [disabled]="!pixQrCodeSource()"
             class="button-split px-responsive bg-accent-contrast text-accent focus:ring-offset-background"
           >
-            Mostrar código QR Pix
+            {{ showPixQrCode() ? 'Esconder' : 'Mostrar' }} código QR Pix
             <ng-icon
               class="color-accent-contrast min-w-fit"
               name="lucideScanQrCode"
@@ -39,6 +70,14 @@
             ></ng-icon>
           </button>
         </div>
+
+        @if (showPixQrCode()) {
+          <img
+            class="w-full rounded-3xl"
+            [src]="pixQrCodeSource()"
+            alt="Código QR Pix"
+          />
+        }
 
         <p>
           Realize o pagamento usando o app do banco ou instituição financeira de

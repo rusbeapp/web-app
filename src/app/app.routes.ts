@@ -88,7 +88,7 @@ export const routes: Routes = [
     path: 'top-up',
     loadComponent: () =>
       import('./pages/top-up/top-up.component').then((m) => m.TopUpComponent),
-    ...canActivate(redirectUnauthorizedToLogin),
+    ...canActivate(redirectFirebaseUnauthorizedToLogin),
   },
   {
     path: '404',
