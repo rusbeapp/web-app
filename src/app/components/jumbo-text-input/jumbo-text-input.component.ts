@@ -1,11 +1,11 @@
 import { Component, computed, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'rusbe-jumbo-text-input',
-  imports: [NgxMaskDirective, FormsModule],
+  imports: [FormsModule],
   providers: [provideNgxMask()],
   templateUrl: './jumbo-text-input.component.html',
 })
