@@ -13,10 +13,18 @@ export class JumboTextInputComponent {
   identifier = input.required<string>();
   label = input.required<string>();
   type = input<JumboTextInputType>(JumboTextInputType.Text);
-  mask = input<string>();
   value = model.required<string>();
   disabled = input<boolean>(false);
   placeholder = input<string>();
+
+  mask = computed(() => {
+    const jumboType = this.type();
+    if (jumboType === JumboTextInputType.CPF) {
+      return '000.000.000-00';
+    }
+
+    return undefined;
+  });
 
   nativeInputType = computed(() => {
     const jumboType = this.type();
@@ -26,6 +34,15 @@ export class JumboTextInputComponent {
       [JumboTextInputType.CPF]: 'text',
     };
     return jumboTypeToNativeType[jumboType];
+  });
+
+  nativeInputMode = computed(() => {
+    const jumboType = this.type();
+    if (jumboType === JumboTextInputType.CPF) {
+      return 'numeric';
+    }
+
+    return undefined;
   });
 }
 

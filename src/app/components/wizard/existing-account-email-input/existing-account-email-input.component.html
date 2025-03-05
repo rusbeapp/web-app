@@ -8,12 +8,14 @@
   <p class="text-balance text-xl sm:text-3xl">
     Qual o <strong>e-mail que você usa em sua conta da General Goods</strong>?
   </p>
-  <rusbe-jumbo-text-input
-    identifier="general-goods-email-input"
-    label="E-mail"
-    placeholder="voce@exemplo.com"
-    [(value)]="email"
-  ></rusbe-jumbo-text-input>
+  <form (ngSubmit)="continue()">
+    <rusbe-jumbo-text-input
+      identifier="general-goods-email-input"
+      label="E-mail"
+      placeholder="voce@exemplo.com"
+      [(value)]="email"
+    ></rusbe-jumbo-text-input>
+  </form>
 </div>
 <div
   class="flex min-h-[30%] flex-col items-center justify-end gap-2 py-4 sm:gap-4 sm:pb-16"
@@ -25,7 +27,7 @@
     Voltar
   </button>
   <button
-    (click)="goToStep.emit(WizardStep.ExistingGeneralGoodsAccountEmailCheck)"
+    (click)="continue()"
     class="button-fill button-full button-large focus:ring-offset-background"
   >
     Continuar

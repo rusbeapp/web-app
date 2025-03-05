@@ -6,12 +6,17 @@
   />
 
   <p class="text-balance text-xl sm:text-3xl">Qual o seu CPF?</p>
-  <rusbe-jumbo-text-input
-    identifier="general-goods-identifier-input"
-    label="CPF"
-    placeholder="___.___.___-__"
-    [(value)]="identifier"
-  ></rusbe-jumbo-text-input>
+
+  <form (ngSubmit)="continue()">
+    <rusbe-jumbo-text-input
+      identifier="general-goods-identifier-input"
+      label="CPF"
+      placeholder="___.___.___-__"
+      [type]="JumboTextInputType.CPF"
+      [(value)]="identifier"
+    ></rusbe-jumbo-text-input>
+  </form>
+  <!-- TODO: Allow usage of non-CPF identifiers -->
 </div>
 <div
   class="flex min-h-[30%] flex-col items-center justify-end gap-2 py-4 sm:gap-4 sm:pb-16"

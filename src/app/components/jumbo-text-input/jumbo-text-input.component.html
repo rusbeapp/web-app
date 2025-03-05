@@ -6,6 +6,8 @@
     class="text-md peer block w-full rounded-lg border-transparent bg-overlay p-4 shadow-lg placeholder:text-transparent autofill:pb-2 autofill:pt-6 focus:border-accent focus:pb-2 focus:pt-6 focus:ring-accent disabled:pointer-events-none disabled:opacity-50 [&:not(:placeholder-shown)]:pb-2 [&:not(:placeholder-shown)]:pt-6"
     [placeholder]="placeholder()"
     [(ngModel)]="value"
+    [mask]="mask()"
+    [attr.inputmode]="nativeInputMode()"
   />
   <label
     [for]="identifier()"
