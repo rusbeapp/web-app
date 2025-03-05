@@ -64,6 +64,7 @@
         @if (!valueSubmitted()) {
           <rusbe-top-up-calculator
             [(value)]="value"
+            [currentBalance]="accountBalance()"
             (submitted)="onCalculatorConfirm($event)"
           ></rusbe-top-up-calculator>
         } @else if (!paymentLocation() && !paymentMethod()) {

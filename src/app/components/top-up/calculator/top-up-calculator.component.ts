@@ -2,6 +2,8 @@ import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  input,
   model,
   output,
   signal,
@@ -22,6 +24,8 @@ import { NgxCurrencyDirective, NgxCurrencyInputMode } from 'ngx-currency';
 
 import { MealBalanceBreakdownComponent } from '@rusbe/components/meal-balance-breakdown/meal-balance-breakdown.component';
 import { WarningCardComponent } from '@rusbe/components/warning-card/warning-card.component';
+import { GeneralGoodsPartialGrantBalance } from '@rusbe/services/general-goods/general-goods.service';
+import { BrlCurrency } from '@rusbe/types/brl-currency';
 
 @Component({
   selector: 'rusbe-top-up-calculator',
@@ -49,8 +53,15 @@ export class TopUpCalculatorComponent {
   submitted = output<boolean>();
 
   value = model.required<string>();
+  currentBalance = input.required<GeneralGoodsPartialGrantBalance>();
 
   inputDisabled = signal(false);
+
+  newBalance = computed(() =>
+    this.currentBalance().value.add(
+      BrlCurrency.fromNumber(parseFloat(this.value())),
+    ),
+  );
 
   readonly topUpValue = new FormControl(
     { value: '0', disabled: this.inputDisabled() },

@@ -35,6 +35,7 @@ import {
   AuthStateService,
 } from '@rusbe/services/auth-state/auth-state.service';
 import {
+  GeneralGoodsPartialGrantBalance,
   GeneralGoodsPixTransactionData,
   GeneralGoodsService,
 } from '@rusbe/services/general-goods/general-goods.service';
@@ -113,6 +114,11 @@ export class TopUpComponent implements OnDestroy {
       cpfNumber: accountData.cpfNumber,
     };
   });
+  accountBalance = computed(
+    () =>
+      this.authStateService.generalGoodsAccountData()
+        ?.balance as GeneralGoodsPartialGrantBalance,
+  );
   currentStage = computed(() => {
     if (this.calculatorComponent()) {
       return 'calculator';
