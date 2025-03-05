@@ -5,11 +5,13 @@ import {
   computed,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideAlarmClock,
   lucideCalendarDays,
   lucideCopy,
   lucideInfo,
@@ -21,6 +23,7 @@ import {
 import { CardGroupComponent } from '@rusbe/components/cards/card-group/card-group.component';
 import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
 import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/general-goods.service';
+import { BrlCurrency } from '@rusbe/types/brl-currency';
 
 @Component({
   selector: 'rusbe-top-up-pix',
@@ -35,6 +38,7 @@ import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/ge
       lucideUserRound,
       lucideMoveRight,
       lucideInfo,
+      lucideAlarmClock,
     }),
   ],
   host: {
@@ -42,6 +46,8 @@ import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/ge
   },
 })
 export class TopUpPixComponent {
+  finished = output();
+
   readonly CURRENT_DATE = new Date();
   readonly LOCALIZED_CURRENT_DATE = this.parseCurrentDate();
 
@@ -53,7 +59,9 @@ export class TopUpPixComponent {
   pixTransactionData = input<GeneralGoodsPixTransactionData | null>();
 
   pixQrCodeSource = computed(() => this.parseBase64ImageSource());
-  parsedTopUpValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
+  parsedTopUpValue = computed(() =>
+    BrlCurrency.fromNumber(parseFloat(this.topUpValue())).toString(),
+  );
   parsedCpf = computed(() => this.parseCpfNumber());
 
   showPixQrCode = signal<boolean>(false);
@@ -66,6 +74,10 @@ export class TopUpPixComponent {
     if (!pixTransactionData) return;
     this.clipboard.copy(pixTransactionData.qrCodeString);
     this.copiedToClipboard.set(true);
+  }
+
+  onFinish() {
+    this.finished.emit();
   }
 
   private parseCurrentDate(): string {

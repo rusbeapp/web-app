@@ -1,9 +1,9 @@
-<div class="p-safe h-svh overflow-auto lg:ml-60">
+<div class="p-safe h-svh overflow-auto">
   <div class="flex h-full flex-col items-start justify-start">
     <div class="reduced-page-container w-full p-4">
       <rusbe-header
         [customAction]="goToPreviousStage.bind(this)"
-        [type]="HEADER_TYPE"
+        [type]="headerType()"
       >
         ADICIONAR CRÉDITOS
       </rusbe-header>
@@ -86,6 +86,7 @@
             [topUpValue]="value()"
             [timeLeft]="remainingTimeString()"
             [pixTransactionData]="pixTransactionData()"
+            (finished)="goToHome()"
           ></rusbe-top-up-pix>
         } @else if (paymentMethod() === 'Cartão de crédito') {
           <rusbe-top-up-credit-card></rusbe-top-up-credit-card>

@@ -10,6 +10,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMoveRight } from '@ng-icons/lucide';
 
 import { LogoComponent } from '@rusbe/components/logo/logo.component';
+import { BrlCurrency } from '@rusbe/types/brl-currency';
 
 import { PaymentMethods } from '../payment-method/payment-method.component';
 
@@ -36,7 +37,9 @@ export class TopUpInLocoHelperComponent {
   paymentMethod = input.required<PaymentMethods | null>();
 
   parsedCpf = computed(() => this.parseCpfNumber());
-  parsedValue = computed(() => parseFloat(this.topUpValue()).toFixed(2));
+  parsedValue = computed(() =>
+    BrlCurrency.fromNumber(parseFloat(this.topUpValue())),
+  );
 
   onBackClicked(): void {
     this.backClicked.emit();

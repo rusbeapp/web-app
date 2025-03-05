@@ -1,9 +1,9 @@
 @if (pixTransactionData()) {
-  <div class="grouping-cards-container my-2 sm:my-4">
+  <div class="grouping-cards-container my-2 h-full sm:my-4">
     <section rusbe-card-group [title]="'PAGAR COM PIX'">
       <div class="px-responsive flex w-full flex-col gap-5">
         <div>
-          <div class="inline-flex gap-4">
+          <div class="inline-flex gap-2">
             <p class="text-2xl">R$</p>
             <p class="font-geometric text-2xl">
               <strong> {{ parsedTopUpValue() }}</strong>
@@ -11,7 +11,7 @@
           </div>
         </div>
 
-        <p class="break-all">
+        <p class="break-all font-geometric">
           {{ pixTransactionData()?.qrCodeString }}
         </p>
 
@@ -92,9 +92,17 @@
             </p>
           </div>
         </div>
-        <p class="text-xs">
-          Tempo restante para pagamento: <strong>{{ timeLeft() }}</strong>
-        </p>
+        <div class="flex items-center gap-2">
+          <ng-icon
+            class="color-accent-contrast min-w-fit"
+            name="lucideAlarmClock"
+            aria-hidden="true"
+          ></ng-icon>
+          <p class="text-xs">
+            Você tem <strong>{{ timeLeft() }}</strong> para completar o
+            pagamento
+          </p>
+        </div>
       </div>
     </section>
     <div class="px-responsive flex flex-col gap-5">
@@ -110,6 +118,19 @@
         responsável por processar seu pagamento e pelas informações de créditos
         e recarga mostradas.
       </p>
+    </div>
+    <div class="px-responsive flex flex-grow flex-col justify-end">
+      <button
+        (click)="onFinish()"
+        class="button-large button-split bg-accent text-accent-contrast focus:ring-offset-background"
+      >
+        Finalizar
+        <ng-icon
+          class="color-accent-contrast min-w-fit"
+          name="lucideMoveRight"
+          aria-hidden="true"
+        ></ng-icon>
+      </button>
     </div>
   </div>
 } @else {

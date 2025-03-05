@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   computed,
   effect,
   inject,
@@ -10,7 +11,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { interval, takeUntil, timer } from 'rxjs';
+import { Subscription, interval, takeUntil, timer } from 'rxjs';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
@@ -61,8 +62,7 @@ import { RusbeError } from '@rusbe/types/error-handling';
     }),
   ],
 })
-export class TopUpComponent {
-  readonly HEADER_TYPE = HeaderType.PageNameWithBackButton;
+export class TopUpComponent implements OnDestroy {
   readonly STAGE_MESSAGE = {
     [TopUpStage.Calculator]: 'Quanto você quer adicionar?',
     [TopUpStage.PaymentMethod]: 'Como você deseja adicionar créditos?',
@@ -95,6 +95,15 @@ export class TopUpComponent {
   currentError = signal<TopUpError | null>(null);
   remainingTimeString = signal(this.parseRemainingTime(0));
 
+  headerType = computed(() => {
+    if (
+      this.currentStage() === 'calculator' ||
+      this.currentStage() === 'payment-method'
+    ) {
+      return HeaderType.PageNameWithBackButton;
+    }
+    return HeaderType.PageNameWithCloseButton;
+  });
   accountData = computed(() => {
     const accountData = this.authStateService.generalGoodsAccountData();
     if (!accountData) return { fullName: '', cpfNumber: '' };
@@ -118,8 +127,9 @@ export class TopUpComponent {
     }
     return 'error';
   });
-
   accountAuthState = computed(() => this.authStateService.accountAuthState());
+
+  pixTimerSubscription?: Subscription;
 
   private readonly router = inject(Router);
   private readonly generalGoodsService = inject(GeneralGoodsService);
@@ -137,6 +147,10 @@ export class TopUpComponent {
         this.currentError.set(TopUpError.GeneralGoodsUnavailable);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.pixTimerSubscription?.unsubscribe();
   }
 
   goToPreviousStage(): boolean {
@@ -206,7 +220,7 @@ export class TopUpComponent {
 
     const result = source.pipe(takeUntil(timer(this.FIFHTEEEN_MINUTES)));
 
-    result.subscribe({
+    this.pixTimerSubscription = result.subscribe({
       next: (timeSpent) => {
         this.remainingTimeString.set(this.parseRemainingTime(timeSpent));
       },

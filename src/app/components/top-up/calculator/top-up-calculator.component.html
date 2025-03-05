@@ -39,11 +39,16 @@
 <section *ngIf="false" class="grouping-card px-responsive">
   <rusbe-meal-balance-breakdown></rusbe-meal-balance-breakdown>
 </section>
-<section class="reduced-page-container w-full p-4">
+<section class="reduced-page-container px-responsive w-full p-4">
   <button
     (click)="onSubmitValue()"
-    class="button-fill button-full button-large focus:ring-offset-background"
+    class="button-large button-split bg-accent text-accent-contrast focus:ring-offset-background"
   >
     Confirmar
+    <ng-icon
+      class="color-accent-contrast min-w-fit"
+      name="lucideMoveRight"
+      aria-hidden="true"
+    ></ng-icon>
   </button>
 </section>
