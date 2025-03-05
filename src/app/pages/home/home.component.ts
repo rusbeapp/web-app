@@ -17,6 +17,7 @@ import {
   AccountAuthState,
   AuthStateService,
 } from '@rusbe/services/auth-state/auth-state.service';
+import { GeneralGoodsBalanceType } from '@rusbe/services/general-goods/general-goods.service';
 import { KnowledgeService } from '@rusbe/services/knowledge/knowledge.service';
 
 @Component({
@@ -46,4 +47,9 @@ export class HomePageComponent {
     const authState = this.authStateService.accountAuthState();
     return authState && authState !== AccountAuthState.LoggedIn;
   });
+  public showAddCreditsCard = computed(
+    () =>
+      this.authStateService.generalGoodsAccountData()?.balance.type !==
+      GeneralGoodsBalanceType.FullGrantStudentHousing,
+  );
 }

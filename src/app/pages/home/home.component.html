@@ -28,9 +28,11 @@
         } @else {
           <rusbe-credits-card class="xs:col-span-2"></rusbe-credits-card>
         }
-        <rusbe-link-card destination="/top-up" iconName="lucideWallet"
-          >Adicionar créditos</rusbe-link-card
-        >
+        @if (showAddCreditsCard()) {
+          <rusbe-link-card destination="/top-up" iconName="lucideWallet"
+            >Adicionar créditos</rusbe-link-card
+          >
+        }
         <rusbe-link-card destination="/menu" iconName="lucideFolderClock"
           >Histórico de cardápios</rusbe-link-card
         >
