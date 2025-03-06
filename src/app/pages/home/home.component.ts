@@ -47,9 +47,14 @@ export class HomePageComponent {
     const authState = this.authStateService.accountAuthState();
     return authState && authState !== AccountAuthState.LoggedIn;
   });
-  public showAddCreditsCard = computed(
-    () =>
-      this.authStateService.generalGoodsAccountData()?.balance.type !==
-      GeneralGoodsBalanceType.FullGrantStudentHousing,
-  );
+  public showAddCreditsCard = computed(() => {
+    const authState = this.authStateService.accountAuthState();
+    const accountData = this.authStateService.generalGoodsAccountData();
+
+    return (
+      (authState === AccountAuthState.LoggedIn &&
+        accountData?.balance.type === GeneralGoodsBalanceType.PartialGrant) ||
+      authState === AccountAuthState.LoggedOut
+    );
+  });
 }

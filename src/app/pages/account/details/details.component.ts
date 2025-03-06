@@ -8,7 +8,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -40,10 +40,12 @@ import {
   AuthStateService,
 } from '@rusbe/services/auth-state/auth-state.service';
 import { DEFAULT_GENERATED_PASSWORD_LENGTH } from '@rusbe/services/crypto/crypto.service';
+import { GeneralGoodsBalanceType } from '@rusbe/services/general-goods/general-goods.service';
 
 @Component({
   selector: 'rusbe-account-details-page',
   imports: [
+    RouterModule,
     NgIcon,
     HeaderComponent,
     UserAvatarComponent,
@@ -122,6 +124,11 @@ export class AccountDetailsPageComponent {
     if (!this.currentRusbeUser()) return '';
 
     return `?authuser=${this.currentRusbeUser()?.email}`;
+  });
+
+  showAddCreditsButton = computed(() => {
+    const accountData = this.accountData();
+    return accountData?.balance.type === GeneralGoodsBalanceType.PartialGrant;
   });
 
   async refreshCredentials() {

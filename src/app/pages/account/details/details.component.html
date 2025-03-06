@@ -21,19 +21,22 @@
       @if (authState() === AccountAuthState.LoggedIn) {
         <section class="grouping-card px-responsive">
           <h2 class="grouping-card-title">Créditos</h2>
-          <rusbe-balance-viewer
-            [colorScheme]="BALANCE_VIEWER_COLOR_SCHEME"
-          ></rusbe-balance-viewer>
 
-          @if (false) {
-            <!-- TODO: Add credits flow -->
-            <div class="pb-1 pt-4 sm:pb-2 sm:pt-6">
-              <button
+          <div class="mb-2 sm:mb-3">
+            <rusbe-balance-viewer
+              [colorScheme]="BALANCE_VIEWER_COLOR_SCHEME"
+            ></rusbe-balance-viewer>
+          </div>
+
+          @if (showAddCreditsButton()) {
+            <div class="pb-1 pt-3 sm:pb-3">
+              <a
+                routerLink="/account/top-up"
                 class="button-fill button-full justify-start focus:ring-offset-overlay"
               >
                 <ng-icon name="lucidePlus" aria-hidden="true"></ng-icon>
                 <span>Adicionar créditos</span>
-              </button>
+              </a>
             </div>
           }
         </section>
