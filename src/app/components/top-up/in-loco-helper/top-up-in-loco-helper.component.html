@@ -7,9 +7,11 @@
     </div>
     <div>
       <p class="text-base">Dados pessoais</p>
-      <p class="text-balance text-4xl">
-        <strong>{{ parsedCpf() }}</strong>
-      </p>
+      @if (parsedCpf()) {
+        <p class="text-balance text-4xl">
+          <strong>{{ parsedCpf() }}</strong>
+        </p>
+      }
       <p class="text-condensed text-2xl">
         <strong>{{ name() }}</strong>
       </p>

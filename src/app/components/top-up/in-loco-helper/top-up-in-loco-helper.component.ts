@@ -47,7 +47,10 @@ export class TopUpInLocoHelperComponent {
 
   private parseCpfNumber(): string {
     const cpfNumber = this.cpf();
+
     if (!cpfNumber) return '';
+    if (cpfNumber.length !== 11) return cpfNumber;
+
     return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   }
 }
