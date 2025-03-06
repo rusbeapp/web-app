@@ -101,7 +101,10 @@ export class TopUpPixComponent {
 
   private parseCpfNumber(): string {
     const cpfNumber = this.cpf();
+
     if (!cpfNumber) return '';
+    if (cpfNumber.length !== 11) return cpfNumber;
+
     return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '•••.$2.$3-••');
   }
 }
