@@ -96,8 +96,8 @@ export class TopUpComponent implements OnDestroy {
 
   headerType = computed(() => {
     if (
-      this.currentStage() === 'calculator' ||
-      this.currentStage() === 'payment-method'
+      this.currentStage() === TopUpStage.Calculator ||
+      this.currentStage() === TopUpStage.PaymentMethod
     ) {
       return HeaderType.PageNameWithBackButton;
     }
