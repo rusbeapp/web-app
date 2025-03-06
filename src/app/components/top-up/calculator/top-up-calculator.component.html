@@ -42,11 +42,17 @@
 <section
   class="reduced-page-container px-responsive flex w-full flex-grow flex-col justify-end gap-5 p-4"
 >
-  <p>
-    Você tem R$ <strong>{{ currentBalance().value }} </strong> de saldo. Após a
-    transação, você ficará com R$ <strong> {{ newBalance() }}</strong
-    >.
-  </p>
+  @if (currentBalance().value.toString() !== newBalance().toString()) {
+    <p>
+      Você tem R$ <strong>{{ currentBalance().value }} </strong> de saldo. Após
+      a transação, você ficará com R$ <strong> {{ newBalance() }}</strong
+      >.
+    </p>
+  } @else {
+    <p>
+      Você tem R$ <strong>{{ currentBalance().value }} </strong> de saldo.
+    </p>
+  }
   <button
     (click)="onSubmitValue()"
     class="button-large button-split bg-accent text-accent-contrast focus:ring-offset-background"
