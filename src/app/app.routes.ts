@@ -85,9 +85,11 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'top-up',
+    path: 'account/top-up',
     loadComponent: () =>
-      import('./pages/top-up/top-up.component').then((m) => m.TopUpComponent),
+      import('./pages/account/top-up/top-up.component').then(
+        (m) => m.AccountTopUpPageComponent,
+      ),
     ...canActivate(redirectFirebaseUnauthorizedToLogin),
   },
   {

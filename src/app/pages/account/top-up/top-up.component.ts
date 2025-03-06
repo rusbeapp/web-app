@@ -42,7 +42,7 @@ import { BrlCurrency } from '@rusbe/types/brl-currency';
 import { RusbeError } from '@rusbe/types/error-handling';
 
 @Component({
-  selector: 'rusbe-top-up',
+  selector: 'rusbe-account-top-up-page',
   imports: [
     HeaderComponent,
     CommonModule,
@@ -61,7 +61,7 @@ import { RusbeError } from '@rusbe/types/error-handling';
     }),
   ],
 })
-export class TopUpComponent implements OnDestroy {
+export class AccountTopUpPageComponent implements OnDestroy {
   readonly STAGE_MESSAGE = {
     [TopUpStage.Calculator]: 'Quanto você quer adicionar?',
     [TopUpStage.PaymentMethod]: 'Como você deseja adicionar créditos?',
