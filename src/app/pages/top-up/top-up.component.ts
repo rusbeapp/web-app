@@ -78,7 +78,7 @@ export class TopUpComponent implements OnDestroy {
     [TopUpError.Generic]:
       'Ocorreu um erro desconhecido. Por favor, tente novamente.',
   };
-  readonly FIFHTEEEN_MINUTES = 15 * 60 * 1000;
+  readonly FIFTEEN_MINUTES = 15 * 60 * 1000;
 
   calculatorComponent = viewChild(TopUpCalculatorComponent);
   paymentMethodComponent = viewChild(TopUpPaymentMethodComponent);
@@ -222,7 +222,7 @@ export class TopUpComponent implements OnDestroy {
   private startPixTimer() {
     const source = interval(1000);
 
-    const result = source.pipe(takeUntil(timer(this.FIFHTEEEN_MINUTES)));
+    const result = source.pipe(takeUntil(timer(this.FIFTEEN_MINUTES)));
 
     this.pixTimerSubscription = result.subscribe({
       next: (timeSpent) => {
@@ -235,7 +235,7 @@ export class TopUpComponent implements OnDestroy {
   }
 
   private parseRemainingTime(timeSpent: number): string {
-    const remainingTime = this.FIFHTEEEN_MINUTES - timeSpent * 1000;
+    const remainingTime = this.FIFTEEN_MINUTES - timeSpent * 1000;
     const minutes = Math.floor(remainingTime / 60000);
     const seconds = Math.floor((remainingTime % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
