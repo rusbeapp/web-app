@@ -11,7 +11,7 @@ import { NgIcon } from '@ng-icons/core';
   host: { class: 'grouping-card-strip-button w-full disabled:opacity-50' },
 })
 export class CardButtonComponent {
-  subtitle = input('');
-  iconName = input('');
-  badgeText = input('');
+  subtitle = input.required<string>();
+  iconName = input.required<string>();
+  badgeText = input<string | undefined>();
 }

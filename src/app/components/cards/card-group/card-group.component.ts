@@ -8,5 +8,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   host: { class: 'grouping-card' },
 })
 export class CardGroupComponent {
-  title = input('');
+  title = input.required();
 }
