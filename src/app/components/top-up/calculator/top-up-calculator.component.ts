@@ -57,11 +57,14 @@ export class TopUpCalculatorComponent {
 
   inputDisabled = signal(false);
 
-  newBalance = computed(() =>
-    this.currentBalance().value.add(
-      BrlCurrency.fromNumber(parseFloat(this.value())),
-    ),
-  );
+  newBalance = computed(() => {
+    const topUpValueFloat = parseFloat(this.value());
+    const currentBalance = this.currentBalance().value;
+
+    if (isNaN(topUpValueFloat)) return currentBalance;
+
+    return currentBalance.add(BrlCurrency.fromNumber(topUpValueFloat));
+  });
 
   readonly topUpValue = new FormControl(
     { value: '0', disabled: this.inputDisabled() },
