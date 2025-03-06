@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   OnDestroy,
   computed,
@@ -56,7 +55,6 @@ import { RusbeError } from '@rusbe/types/error-handling';
     NgIcon,
   ],
   templateUrl: './top-up.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideInfo,
