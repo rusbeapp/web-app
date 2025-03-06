@@ -1,0 +1,29 @@
+<div class="grouping-card-strip-button-inner">
+  @if (iconName()) {
+    <ng-icon
+      class="min-w-fit fill-accent"
+      [name]="iconName()"
+      aria-hidden="true"
+    ></ng-icon>
+  } @else {
+    <div></div>
+  }
+  <div class="w-full text-overlay-contrast">
+    <h3><ng-content></ng-content></h3>
+    <p class="my-1 text-xs font-normal sm:text-base">
+      {{ subtitle() }}
+    </p>
+  </div>
+  @if (badgeText()) {
+    <p
+      class="transition-appear whitespace-pre rounded-md bg-accent px-2 py-1 font-geometric text-xs font-bold uppercase text-accent-contrast sm:mx-6 sm:mt-6"
+    >
+      {{ badgeText() }}
+    </p>
+  }
+  <ng-icon
+    class="min-w-fit"
+    name="lucideChevronRight"
+    aria-hidden="true"
+  ></ng-icon>
+</div>

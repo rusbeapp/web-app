@@ -1,0 +1,98 @@
+<div class="p-safe h-svh overflow-auto">
+  <div class="flex h-full flex-col items-start justify-start">
+    <div class="reduced-page-container w-full p-4">
+      <rusbe-header
+        [customAction]="goToPreviousStage.bind(this)"
+        [type]="headerType()"
+      >
+        Adicionar créditos
+      </rusbe-header>
+    </div>
+    @let currentErrorValue = currentError();
+
+    @if (accountAuthState() === undefined) {
+      <div
+        class="flex h-full w-full flex-grow flex-col items-center justify-center gap-4 py-4 sm:gap-8"
+      >
+        <div class="h-12 w-12 sm:h-16 sm:w-16">
+          <rusbe-spinner></rusbe-spinner>
+        </div>
+        <p class="text-balance text-xl sm:text-3xl">Um momento...</p>
+      </div>
+    } @else if (currentErrorValue) {
+      <div class="flex h-full w-full flex-grow flex-col p-4">
+        <div
+          class="flex h-full w-full flex-grow flex-col items-center justify-center gap-4"
+        >
+          <ng-icon
+            class="text-2xl text-accent sm:text-3xl"
+            name="lucideInfo"
+            aria-hidden="true"
+          ></ng-icon>
+
+          <p class="text-center text-xl sm:text-3xl">
+            <strong>{{ ERROR_MESSAGES[currentErrorValue] }}</strong>
+          </p>
+        </div>
+
+        <div
+          class="flex min-h-[30%] flex-col items-center justify-end gap-2 py-4 sm:gap-4 sm:pb-16"
+        >
+          <button
+            (click)="goToHome()"
+            class="button-text button-full button-large focus:ring-offset-background"
+          >
+            Voltar
+          </button>
+          <button
+            (click)="retry()"
+            class="button-fill button-full button-large focus:ring-offset-background"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+    } @else {
+      @if (STAGE_MESSAGE[currentStage()]) {
+        <div class="reduced-page-container w-full p-4">
+          <p class="text-balance text-2xl sm:text-3xl">
+            <strong>{{ STAGE_MESSAGE[currentStage()] }}</strong>
+          </p>
+        </div>
+      }
+      <main class="reduced-page-container flex w-full flex-grow">
+        @if (!valueSubmitted()) {
+          <rusbe-top-up-calculator
+            [(value)]="value"
+            [currentBalance]="accountBalance()"
+            (submitted)="onCalculatorConfirm($event)"
+          ></rusbe-top-up-calculator>
+        } @else if (!paymentLocation() && !paymentMethod()) {
+          <rusbe-top-up-payment-method
+            (paymentMethodChanged)="onPaymentMethodChange($event)"
+            (paymentLocationChanged)="onPaymentLocaltionChange($event)"
+          ></rusbe-top-up-payment-method>
+        } @else if (paymentLocation() === 'InLoco') {
+          <rusbe-top-up-in-loco-helper
+            [cpf]="accountData().cpfNumber"
+            [name]="accountData().fullName"
+            [topUpValue]="value()"
+            [paymentMethod]="paymentMethod()"
+            (backClicked)="goToHome()"
+          ></rusbe-top-up-in-loco-helper>
+        } @else if (paymentMethod() === 'Pix') {
+          <rusbe-top-up-pix
+            [cpf]="accountData().cpfNumber"
+            [name]="accountData().fullName"
+            [topUpValue]="value()"
+            [timeLeft]="remainingTimeString()"
+            [pixTransactionData]="pixTransactionData()"
+            (finished)="goToHome()"
+          ></rusbe-top-up-pix>
+        } @else if (paymentMethod() === 'Cartão de crédito') {
+          <rusbe-top-up-credit-card></rusbe-top-up-credit-card>
+        }
+      </main>
+    }
+  </div>
+</div>

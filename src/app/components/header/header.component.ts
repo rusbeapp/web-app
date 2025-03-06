@@ -22,6 +22,7 @@ export class HeaderComponent {
   HeaderType = HeaderType;
 
   type = input<HeaderType>(HeaderType.LogoWithUserAccountButton);
+  customAction = input<(() => boolean) | null>(null);
 
   readonly buttonColorSchemeMap: Partial<
     Record<HeaderType, ButtonColorScheme>

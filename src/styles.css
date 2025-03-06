@@ -199,6 +199,10 @@
     @apply w-full justify-center;
   }
 
+  .button-split {
+    @apply button-base w-full justify-between;
+  }
+
   .button-large {
     @apply p-4 text-sm sm:text-lg;
   }
@@ -220,7 +224,7 @@
   }
 
   .grouping-card-strip-button {
-    @apply w-full touch-manipulation rounded-sm font-bold text-accent transition-all hover:bg-accent/10 focus:outline-none focus:ring focus:ring-accent focus:ring-offset-0 active:bg-accent/30 sm:gap-6;
+    @apply w-full touch-manipulation rounded-sm font-bold text-accent transition-all hover:bg-accent/10 focus:outline-none focus:ring focus:ring-accent focus:ring-offset-0 active:bg-accent/30 disabled:pointer-events-none sm:gap-6;
   }
 
   .grouping-card-strip-button-inner {

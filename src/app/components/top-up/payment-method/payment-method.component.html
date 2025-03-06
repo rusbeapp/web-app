@@ -1,0 +1,29 @@
+<div class="grouping-cards-container my-2 sm:my-4">
+  <section rusbe-card-group [title]="'PELO APP'">
+    @for (paymentMethod of inAppPaymentMethods; track $index) {
+      <button
+        rusbe-card-button
+        [iconName]="PAYMENT_METHOD_ICONS[paymentMethod]"
+        [disabled]="paymentMethod === 'Cartão de crédito'"
+        [badgeText]="paymentMethod === 'Cartão de crédito' ? 'Vem aí!' : ''"
+        [subtitle]="PAYMENT_METHOD_MESSAGES[paymentMethod]"
+        (click)="handlePaymentMethodSelection(paymentMethod, 'InApp')"
+      >
+        {{ paymentMethod }}
+      </button>
+    }
+  </section>
+
+  <section rusbe-card-group [title]="'PRESENCIALMENTE NO GUICHÊ'">
+    @for (paymentMethod of inLocoPaymentMethods; track $index) {
+      <button
+        rusbe-card-button
+        [iconName]="PAYMENT_METHOD_ICONS[paymentMethod]"
+        [subtitle]="'Dirija-se ao guichê para completar a compra.'"
+        (click)="handlePaymentMethodSelection(paymentMethod, 'InLoco')"
+      >
+        {{ paymentMethod }}
+      </button>
+    }
+  </section>
+</div>

@@ -9,6 +9,7 @@
 
   @if (hasBackButton()) {
     <rusbe-back-button
+      [customAction]="customAction()"
       [colorScheme]="buttonColorSchemeMap[type()]!"
     ></rusbe-back-button>
   }
