@@ -74,7 +74,7 @@ export class TopUpComponent implements OnDestroy {
     [TopUpError.GeneralGoodsUnavailable]:
       'Infelizmente, o sistema da General Goods está fora do ar.',
     [TopUpError.PixUnavailable]:
-      'Ocorreu um erro ao tentar gerar o código pix.',
+      'Ocorreu um erro ao tentar gerar o código Pix.',
     [TopUpError.Generic]:
       'Ocorreu um erro desconhecido. Por favor, tente novamente.',
   };
