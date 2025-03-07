@@ -1,17 +1,8 @@
 import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
-import {
-  lucideBanknote,
-  lucideChevronRight,
-  lucideCreditCard,
-  lucideEraser,
-  lucideFullscreen,
-  lucideListStart,
-  lucidePalette,
-  lucideRotateCcw,
-  lucideUtensils,
-} from '@ng-icons/lucide';
+import { faBrandPix } from '@ng-icons/font-awesome/brands';
+import { lucideChevronRight } from '@ng-icons/lucide';
 
 import { CardButtonComponent } from '@rusbe/components/cards/card-button/card-button.component';
 import { CardGroupComponent } from '@rusbe/components/cards/card-group/card-group.component';
@@ -24,15 +15,8 @@ import { GeneralGoodsTransactionType } from '@rusbe/services/general-goods/gener
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
-      lucidePalette,
-      lucideUtensils,
-      lucideListStart,
-      lucideFullscreen,
-      lucideRotateCcw,
-      lucideEraser,
+      faBrandPix,
       lucideChevronRight,
-      lucideCreditCard,
-      lucideBanknote,
     }),
   ],
 })
@@ -50,10 +34,10 @@ export class TopUpPaymentMethodComponent {
   };
 
   readonly PAYMENT_METHOD_ICONS = {
-    [GeneralGoodsTransactionType.Pix]: 'pix',
-    [GeneralGoodsTransactionType.CreditCard]: 'bootstrapCreditCard',
-    'Em espécie': 'bootstrapCash',
-    'Cartão de débito': 'bootstrapDebitCard',
+    [GeneralGoodsTransactionType.Pix]: 'faBrandPix',
+    [GeneralGoodsTransactionType.CreditCard]: 'customCreditCard',
+    'Em espécie': 'customCash',
+    'Cartão de débito': 'customDebitCard',
   };
 
   handlePaymentMethodSelection(

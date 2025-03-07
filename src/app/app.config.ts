@@ -25,7 +25,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
-import { provideNgIconLoader } from '@ng-icons/core';
+import { provideNgIconLoader, withCaching } from '@ng-icons/core';
 
 import { routes } from '@rusbe/app.routes';
 import { environment } from '@rusbe/environments/environment';
@@ -33,6 +33,8 @@ import { version } from '@rusbe/environments/version';
 import { AccountService } from '@rusbe/services/account/account.service';
 import { PreferencesService } from '@rusbe/services/preferences/preferences.service';
 import { viewTransitionHandler } from '@rusbe/view-transition-handler';
+
+import { CUSTOM_ICON_TO_PATH } from './custom-icons';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -73,7 +75,16 @@ export const appConfig: ApplicationConfig = {
     UserTrackingService,
     provideNgIconLoader((name) => {
       const http = inject(HttpClient);
-      return http.get(`/assets/icons/${name}.svg`, { responseType: 'text' });
-    }),
+      const iconPath = CUSTOM_ICON_TO_PATH[name];
+
+      if (!iconPath) {
+        console.warn(`Custom Icon Loader: Icon "${name}" not found.`);
+        return ``;
+      }
+
+      return http.get(iconPath, {
+        responseType: 'text',
+      });
+    }, withCaching()),
   ],
 };
