@@ -15,9 +15,9 @@ import { Subscription, takeWhile, tap, timer } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCopy } from '@ng-icons/lucide';
 
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
 import { WarningCardComponent } from '@rusbe/components/warning-card/warning-card.component';
-import { WizardInterludeComponent } from '@rusbe/components/wizard/interlude/interlude.component';
 import { WizardStep } from '@rusbe/pages/account/wizard/wizard.component';
 import {
   AccountService,
@@ -28,12 +28,7 @@ import {
 
 @Component({
   selector: 'rusbe-wizard-account-verification',
-  imports: [
-    SpinnerComponent,
-    NgIcon,
-    WizardInterludeComponent,
-    WarningCardComponent,
-  ],
+  imports: [SpinnerComponent, NgIcon, InterludeComponent, WarningCardComponent],
   viewProviders: [provideIcons({ lucideCopy })],
   templateUrl: './account-verification.component.html',
 })

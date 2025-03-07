@@ -20,7 +20,7 @@ import {
   HeaderComponent,
   HeaderType,
 } from '@rusbe/components/header/header.component';
-import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { LocalStorageService } from '@rusbe/services/local-storage/local-storage.service';
 import {
   InterfaceTheme,
@@ -30,7 +30,7 @@ import { MealType } from '@rusbe/types/archive';
 
 @Component({
   selector: 'rusbe-preferences-page',
-  imports: [NgIcon, HeaderComponent, FormsModule, SpinnerComponent],
+  imports: [NgIcon, HeaderComponent, FormsModule, InterludeComponent],
   templateUrl: './preferences.component.html',
   viewProviders: [
     provideIcons({

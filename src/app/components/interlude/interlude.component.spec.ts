@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WizardInterludeComponent } from './interlude.component';
+import { InterludeComponent } from './interlude.component';
 
-describe('WizardInterludeComponent', () => {
-  let component: WizardInterludeComponent;
-  let fixture: ComponentFixture<WizardInterludeComponent>;
+describe('InterludeComponent', () => {
+  let component: InterludeComponent;
+  let fixture: ComponentFixture<InterludeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WizardInterludeComponent],
+      imports: [InterludeComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(WizardInterludeComponent);
+    fixture = TestBed.createComponent(InterludeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

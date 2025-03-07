@@ -57,9 +57,9 @@
     class="flex min-h-[30%] flex-col items-center justify-end gap-2 py-4 sm:gap-4 sm:pb-16"
   >
     @if (verificationStatus() === VerificationStatus.Verifying) {
-      <rusbe-wizard-interlude>Verificando sua conta...</rusbe-wizard-interlude>
+      <rusbe-interlude>Verificando sua conta...</rusbe-interlude>
     } @else if (verificationStatus() === VerificationStatus.SendingEmail) {
-      <rusbe-wizard-interlude>Enviando e-mail...</rusbe-wizard-interlude>
+      <rusbe-interlude>Enviando e-mail...</rusbe-interlude>
     } @else {
       @if (verificationStatus() === VerificationStatus.VerificationFailed) {
         <rusbe-warning-card class="transition-appear"

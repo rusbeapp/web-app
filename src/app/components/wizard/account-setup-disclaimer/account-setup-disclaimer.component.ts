@@ -9,11 +9,11 @@ import {
   GeneralGoodsIntegrationType,
 } from '@rusbe/services/account/account.service';
 
-import { WizardInterludeComponent } from '../interlude/interlude.component';
+import { InterludeComponent } from '../../interlude/interlude.component';
 
 @Component({
   selector: 'rusbe-wizard-account-setup-disclaimer',
-  imports: [NgIcon, WizardInterludeComponent],
+  imports: [NgIcon, InterludeComponent],
   templateUrl: './account-setup-disclaimer.component.html',
   viewProviders: [provideIcons({ lucideChevronDown })],
 })

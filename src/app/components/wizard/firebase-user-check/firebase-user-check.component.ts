@@ -1,20 +1,15 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { UserAvatarComponent } from '@rusbe/components/user-avatar/user-avatar.component';
 import { WarningCardComponent } from '@rusbe/components/warning-card/warning-card.component';
 import { WizardStep } from '@rusbe/pages/account/wizard/wizard.component';
 import { AccountService } from '@rusbe/services/account/account.service';
 
-import { WizardInterludeComponent } from '../interlude/interlude.component';
-
 @Component({
   selector: 'rusbe-wizard-firebase-user-check',
-  imports: [
-    UserAvatarComponent,
-    WarningCardComponent,
-    WizardInterludeComponent,
-  ],
+  imports: [UserAvatarComponent, WarningCardComponent, InterludeComponent],
   templateUrl: './firebase-user-check.component.html',
 })
 export class WizardFirebaseUserCheckComponent {

@@ -21,7 +21,7 @@
   class="flex min-h-[30%] flex-col items-center justify-end gap-2 py-4 sm:gap-4 sm:pb-16"
 >
   @if (signInStatus() === SignInStatus.SigningIn) {
-    <rusbe-wizard-interlude>Autenticando...</rusbe-wizard-interlude>
+    <rusbe-interlude>Autenticando...</rusbe-interlude>
   } @else if (requestSignIn()) {
     @if (signInStatus() === SignInStatus.SignInFailed) {
       <rusbe-warning-card class="transition-appear"

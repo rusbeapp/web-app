@@ -5,11 +5,11 @@ import { WizardStep } from '@rusbe/pages/account/wizard/wizard.component';
 import { AccountService } from '@rusbe/services/account/account.service';
 import { AuthStateService } from '@rusbe/services/auth-state/auth-state.service';
 
-import { WizardInterludeComponent } from '../interlude/interlude.component';
+import { InterludeComponent } from '../../interlude/interlude.component';
 
 @Component({
   selector: 'rusbe-wizard-credential-mismatch-warning',
-  imports: [WarningCardComponent, WizardInterludeComponent],
+  imports: [WarningCardComponent, InterludeComponent],
   templateUrl: './credential-mismatch-warning.component.html',
 })
 export class WizardCredentialMismatchWarningComponent {
