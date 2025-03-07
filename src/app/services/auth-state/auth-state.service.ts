@@ -208,7 +208,7 @@ export class AuthStateService {
       // This should not happen. Since login was attempted, integration data is expected to exist.
 
       console.warn(
-        'Auth State Service: Unexpected status when trying to infer reason for unsuccessful General Goods login',
+        'Auth State Service: Unexpected status when trying to infer reason for unsuccessful General Goods login.',
         error,
       );
 

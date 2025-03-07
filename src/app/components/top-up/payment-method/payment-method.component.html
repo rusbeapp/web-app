@@ -1,5 +1,5 @@
 <div class="grouping-cards-container my-2 sm:my-4">
-  <section rusbe-card-group [title]="'PELO APP'">
+  <section rusbe-card-group [title]="'Pelo app'">
     @for (paymentMethod of inAppPaymentMethods; track $index) {
       <button
         rusbe-card-button
@@ -14,7 +14,7 @@
     }
   </section>
 
-  <section rusbe-card-group [title]="'PRESENCIALMENTE NO GUICHÊ'">
+  <section rusbe-card-group [title]="'Presencialmente no guichê'">
     @for (paymentMethod of inLocoPaymentMethods; track $index) {
       <button
         rusbe-card-button
