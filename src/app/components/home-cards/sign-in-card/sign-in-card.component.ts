@@ -31,7 +31,7 @@ export class SignInCardComponent {
       [AccountAuthState.PendingGeneralGoodsVerification]: '/account/wizard',
       [AccountAuthState.GeneralGoodsAccountCredentialMismatch]:
         '/account/wizard',
-      [AccountAuthState.GeneralGoodsServiceUnavailable]: '/services-status',
+      [AccountAuthState.GeneralGoodsServiceUnavailable]: '/account/details',
     };
 
     return loginStatusToLinkUrl[loginStatus];
