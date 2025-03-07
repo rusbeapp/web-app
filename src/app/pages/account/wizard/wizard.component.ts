@@ -179,7 +179,13 @@ export class AccountWizardPageComponent {
   }
 
   exitWizard() {
-    if (this.router.lastSuccessfulNavigation?.previousNavigation != null) {
+    const previousNavigation =
+      this.router.lastSuccessfulNavigation?.previousNavigation;
+
+    if (
+      previousNavigation != null &&
+      previousNavigation.finalUrl?.toString() !== '/account/login'
+    ) {
       this.location.back();
     } else {
       this.router.navigate(['/']);
