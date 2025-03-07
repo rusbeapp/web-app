@@ -24,6 +24,7 @@ import { CardGroupComponent } from '@rusbe/components/cards/card-group/card-grou
 import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
 import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/general-goods.service';
 import { BrlCurrency } from '@rusbe/types/brl-currency';
+import { formatIdentifierAsCpf } from '@rusbe/utils/strings';
 
 @Component({
   selector: 'rusbe-top-up-pix',
@@ -103,8 +104,9 @@ export class TopUpPixComponent {
     const cpfNumber = this.cpf();
 
     if (!cpfNumber) return '';
-    if (cpfNumber.length !== 11) return cpfNumber;
 
-    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '•••.$2.$3-••');
+    return formatIdentifierAsCpf(cpfNumber, {
+      maskIdentifier: true,
+    });
   }
 }

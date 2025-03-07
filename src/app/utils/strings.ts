@@ -14,3 +14,28 @@ export function formatArrayAsCommaSeparatedString(array: string[]) {
 
   return formatter.format(array);
 }
+
+export function formatIdentifierAsCpf(
+  identifier: string,
+  options: { maskIdentifier: boolean } = {
+    maskIdentifier: false,
+  },
+) {
+  if (identifier.length !== 11) {
+    if (options.maskIdentifier) {
+      return '•••.•••.•••-••';
+    } else {
+      return identifier;
+    }
+  }
+
+  let replacer: string;
+
+  if (options.maskIdentifier) {
+    replacer = '•••.$2.$3-••';
+  } else {
+    replacer = '$1.$2.$3-$4';
+  }
+
+  return identifier.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, replacer);
+}

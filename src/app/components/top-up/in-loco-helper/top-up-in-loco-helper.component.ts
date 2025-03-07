@@ -11,6 +11,7 @@ import { lucideMoveRight } from '@ng-icons/lucide';
 
 import { LogoComponent } from '@rusbe/components/logo/logo.component';
 import { BrlCurrency } from '@rusbe/types/brl-currency';
+import { formatIdentifierAsCpf } from '@rusbe/utils/strings';
 
 import { PaymentMethods } from '../payment-method/payment-method.component';
 
@@ -49,8 +50,7 @@ export class TopUpInLocoHelperComponent {
     const cpfNumber = this.cpf();
 
     if (!cpfNumber) return '';
-    if (cpfNumber.length !== 11) return cpfNumber;
 
-    return cpfNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    return formatIdentifierAsCpf(cpfNumber);
   }
 }

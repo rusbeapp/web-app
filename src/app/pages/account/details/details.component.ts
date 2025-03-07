@@ -41,6 +41,7 @@ import {
 } from '@rusbe/services/auth-state/auth-state.service';
 import { DEFAULT_GENERATED_PASSWORD_LENGTH } from '@rusbe/services/crypto/crypto.service';
 import { GeneralGoodsBalanceType } from '@rusbe/services/general-goods/general-goods.service';
+import { formatIdentifierAsCpf } from '@rusbe/utils/strings';
 
 @Component({
   selector: 'rusbe-account-details-page',
@@ -108,16 +109,17 @@ export class AccountDetailsPageComponent {
 
   AccountAuthState = AccountAuthState;
 
-  maskedCPF = computed(() => {
+  maskedCpf = computed(() => {
     const accountData = this.accountData();
 
-    // TODO: Show a skeleton loading for the account data
-    if (!accountData || accountData.cpfNumber.length !== 11) {
+    if (!accountData) {
+      // TODO: Show a skeleton loading for the account data
       return '•••.•••.•••-••';
     }
 
-    // Mask 3 first digits and 2 last digits
-    return `•••.${accountData.cpfNumber.slice(3, 6)}.${accountData.cpfNumber.slice(6, 9)}-••`;
+    return formatIdentifierAsCpf(accountData.cpfNumber, {
+      maskIdentifier: true,
+    });
   });
 
   authUserQueryParam = computed(() => {
