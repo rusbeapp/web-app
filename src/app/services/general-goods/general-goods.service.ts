@@ -480,15 +480,15 @@ interface GeneralGoodsPixTransactionDataResponseBody {
     amount: number;
     type: GeneralGoodsTransactionType.Pix;
     status: number;
-    updated_at: Date;
-    created_at: Date;
+    updated_at: string;
+    created_at: string;
     id: number;
     tid: string;
     receivedDate: string;
     paymentId: string;
     returnMessage: string;
     returnCode: string;
-    acquirerTransactionId: string;
+    acquirerTransactionId: string | null;
     qrcodeBase64Image: string;
     qrCodeString: string;
   };
