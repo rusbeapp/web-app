@@ -1,7 +1,7 @@
 @if (pixTransactionData()) {
   <div class="grouping-cards-container my-2 h-full sm:my-4">
-    <section rusbe-card-group [title]="'PAGAR COM PIX'">
-      <div class="px-responsive flex w-full flex-col gap-5">
+    <section rusbe-card-group [title]="'Pagar com Pix'">
+      <div class="px-responsive flex w-full flex-col gap-4 sm:gap-6">
         <div>
           <div class="inline-flex gap-2">
             <p class="text-2xl">R$</p>
@@ -11,14 +11,14 @@
           </div>
         </div>
 
-        <p class="break-all font-geometric">
+        <p class="select-all break-all font-geometric">
           {{ pixTransactionData()?.qrCodeString }}
         </p>
 
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-2 sm:gap-4">
           <button
             (click)="copyPasswordToClipboard()"
-            class="button-split px-responsive bg-accent text-accent-contrast focus:ring-offset-background"
+            class="button-fill button-full px-responsive justify-between focus:ring-offset-overlay"
           >
             <span> Copiar código </span>
             <div class="flex flex-row items-center gap-2">
@@ -36,7 +36,7 @@
           <button
             (click)="showPixQrCode.set(!showPixQrCode())"
             [disabled]="!pixQrCodeSource()"
-            class="button-split px-responsive bg-accent-contrast text-accent focus:ring-offset-background"
+            class="button-outline button-full px-responsive justify-between focus:ring-offset-overlay"
           >
             {{ showPixQrCode() ? 'Esconder' : 'Mostrar' }} código QR Pix
             <ng-icon
@@ -61,51 +61,53 @@
           processada.
         </p>
 
-        <div class="flex items-center gap-2">
-          <ng-icon
-            class="color-accent-contrast min-w-fit"
-            name="lucideCalendarDays"
-            aria-hidden="true"
-          ></ng-icon>
-          <p>
-            <strong>{{ LOCALIZED_CURRENT_DATE }}</strong>
-          </p>
-        </div>
-        <div
-          class="grid min-w-fit auto-cols-max grid-flow-col grid-rows-2 gap-x-2"
-        >
-          <div class="row-span-2 grid items-center">
+        <div class="flex flex-col gap-4 pb-2 sm:pb-4">
+          <div class="flex items-center gap-2">
             <ng-icon
               class="color-accent-contrast min-w-fit"
-              name="lucideUserRound"
+              name="lucideCalendarDays"
               aria-hidden="true"
             ></ng-icon>
-          </div>
-          <div class="col-span-1 row-span-1 grid">
-            <p class="w-fit font-geometric tabular-nums">
-              <strong>{{ parsedCpf() }}</strong>
+            <p>
+              <strong>{{ LOCALIZED_CURRENT_DATE }}</strong>
             </p>
           </div>
-          <div class="col-span-1 row-span-1 grid">
-            <p class="text-condensed w-auto">
-              {{ name() }}
+          <div
+            class="grid min-w-fit auto-cols-max grid-flow-col grid-rows-2 gap-x-2"
+          >
+            <div class="row-span-2 grid items-center">
+              <ng-icon
+                class="color-accent-contrast min-w-fit"
+                name="lucideUserRound"
+                aria-hidden="true"
+              ></ng-icon>
+            </div>
+            <div class="col-span-1 row-span-1 grid">
+              <p class="w-fit font-geometric tabular-nums">
+                <strong>{{ parsedCpf() }}</strong>
+              </p>
+            </div>
+            <div class="col-span-1 row-span-1 grid">
+              <p class="text-condensed w-auto">
+                {{ name() }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <ng-icon
+              class="color-accent-contrast min-w-fit"
+              name="lucideAlarmClock"
+              aria-hidden="true"
+            ></ng-icon>
+            <p>
+              Você tem <strong>{{ timeLeft() }}</strong> para completar o
+              pagamento
             </p>
           </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <ng-icon
-            class="color-accent-contrast min-w-fit"
-            name="lucideAlarmClock"
-            aria-hidden="true"
-          ></ng-icon>
-          <p class="text-xs">
-            Você tem <strong>{{ timeLeft() }}</strong> para completar o
-            pagamento
-          </p>
         </div>
       </div>
     </section>
-    <div class="px-responsive flex flex-col gap-5">
+    <div class="px-responsive flex flex-col gap-6">
       <p>
         <strong
           >Sempre verifique se o destinatário do seu pagamento corresponde à
@@ -122,14 +124,9 @@
     <div class="px-responsive flex flex-grow flex-col justify-end">
       <button
         (click)="onFinish()"
-        class="button-large button-split bg-accent text-accent-contrast focus:ring-offset-background"
+        class="button-large button-fill button-full mb-4 mt-4 focus:ring-offset-background sm:mb-16"
       >
         Finalizar
-        <ng-icon
-          class="color-accent-contrast min-w-fit"
-          name="lucideMoveRight"
-          aria-hidden="true"
-        ></ng-icon>
       </button>
     </div>
   </div>
@@ -137,9 +134,6 @@
   <div
     class="flex h-full w-full flex-col items-center justify-center gap-4 py-4 sm:gap-8"
   >
-    <div class="h-12 w-12 sm:h-16 sm:w-16">
-      <rusbe-spinner></rusbe-spinner>
-    </div>
-    <p class="text-balance text-xl sm:text-3xl">Gerando código Pix...</p>
+    <rusbe-interlude>Gerando código Pix...</rusbe-interlude>
   </div>
 }

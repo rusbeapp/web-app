@@ -6,9 +6,6 @@ import {
   output,
 } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMoveRight } from '@ng-icons/lucide';
-
 import { LogoComponent } from '@rusbe/components/logo/logo.component';
 import { BrlCurrency } from '@rusbe/types/brl-currency';
 import { formatIdentifierAsCpf } from '@rusbe/utils/strings';
@@ -17,14 +14,9 @@ import { PaymentMethods } from '../payment-method/payment-method.component';
 
 @Component({
   selector: 'rusbe-top-up-in-loco-helper',
-  imports: [LogoComponent, NgIcon],
+  imports: [LogoComponent],
   templateUrl: './top-up-in-loco-helper.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [
-    provideIcons({
-      lucideMoveRight,
-    }),
-  ],
   host: {
     class: 'flex flex-grow flex-col items-start justify-start',
   },

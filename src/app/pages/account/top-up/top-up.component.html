@@ -14,13 +14,12 @@
       <div
         class="flex h-full w-full flex-grow flex-col items-center justify-center gap-4 py-4 sm:gap-8"
       >
-        <div class="h-12 w-12 sm:h-16 sm:w-16">
-          <rusbe-spinner></rusbe-spinner>
-        </div>
-        <p class="text-balance text-xl sm:text-3xl">Um momento...</p>
+        <rusbe-interlude>Um momento...</rusbe-interlude>
       </div>
     } @else if (currentErrorValue) {
-      <div class="flex h-full w-full flex-grow flex-col p-4">
+      <div
+        class="reduced-page-container transition-appear flex h-full w-full flex-grow flex-col p-4"
+      >
         <div
           class="flex h-full w-full flex-grow flex-col items-center justify-center gap-4"
         >
@@ -30,8 +29,8 @@
             aria-hidden="true"
           ></ng-icon>
 
-          <p class="text-center text-xl sm:text-3xl">
-            <strong>{{ ERROR_MESSAGES[currentErrorValue] }}</strong>
+          <p class="text-balance text-center text-lg sm:text-2xl">
+            {{ ERROR_MESSAGES[currentErrorValue] }}
           </p>
         </div>
 
@@ -40,21 +39,27 @@
         >
           <button
             (click)="goToHome()"
-            class="button-text button-full button-large focus:ring-offset-background"
+            class="button-full button-large focus:ring-offset-background"
+            [ngClass]="{
+              'button-text': canRetry(),
+              'button-fill': !canRetry(),
+            }"
           >
             Voltar
           </button>
-          <button
-            (click)="retry()"
-            class="button-fill button-full button-large focus:ring-offset-background"
-          >
-            Tentar novamente
-          </button>
+          @if (canRetry()) {
+            <button
+              (click)="retry()"
+              class="button-fill button-full button-large focus:ring-offset-background"
+            >
+              Tentar novamente
+            </button>
+          }
         </div>
       </div>
     } @else {
       @if (STAGE_MESSAGE[currentStage()]) {
-        <div class="reduced-page-container w-full p-4">
+        <div class="reduced-page-container w-full p-4 sm:pt-6">
           <p class="text-balance text-2xl sm:text-3xl">
             <strong>{{ STAGE_MESSAGE[currentStage()] }}</strong>
           </p>
@@ -66,11 +71,13 @@
             [(value)]="value"
             [currentBalance]="accountBalance()"
             (submitted)="onCalculatorConfirm($event)"
+            class="transition-appear"
           ></rusbe-top-up-calculator>
         } @else if (!paymentLocation() && !paymentMethod()) {
           <rusbe-top-up-payment-method
             (paymentMethodChanged)="onPaymentMethodChange($event)"
             (paymentLocationChanged)="onPaymentLocaltionChange($event)"
+            class="transition-appear"
           ></rusbe-top-up-payment-method>
         } @else if (paymentLocation() === 'InLoco') {
           <rusbe-top-up-in-loco-helper
@@ -79,6 +86,7 @@
             [topUpValue]="value()"
             [paymentMethod]="paymentMethod()"
             (backClicked)="goToHome()"
+            class="transition-appear"
           ></rusbe-top-up-in-loco-helper>
         } @else if (paymentMethod() === 'Pix') {
           <rusbe-top-up-pix
@@ -88,9 +96,12 @@
             [timeLeft]="remainingTimeString()"
             [pixTransactionData]="pixTransactionData()"
             (finished)="goToHome()"
+            class="transition-appear"
           ></rusbe-top-up-pix>
         } @else if (paymentMethod() === 'Cartão de crédito') {
-          <rusbe-top-up-credit-card></rusbe-top-up-credit-card>
+          <rusbe-top-up-credit-card
+            class="transition-appear"
+          ></rusbe-top-up-credit-card>
         }
       </main>
     }

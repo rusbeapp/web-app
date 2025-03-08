@@ -1,34 +1,34 @@
 <section
-  class="reduced-page-container flex w-full flex-grow flex-col rounded-t-3xl bg-overlay-contrast p-4 pt-9 [&_p]:text-accent-contrast"
+  class="reduced-page-container mt-2 flex w-full flex-grow flex-col rounded-t-3xl bg-overlay-contrast p-4 pt-8 text-accent-contrast sm:mt-4 sm:p-6 sm:pt-10"
 >
-  <div class="flex flex-grow flex-col gap-10">
+  <div class="flex flex-grow flex-col gap-8">
     <div class="h-6 text-base text-accent-contrast sm:h-8">
       <rusbe-logo></rusbe-logo>
     </div>
     <div>
       <p class="text-base">Dados pessoais</p>
       @if (parsedCpf()) {
-        <p class="text-balance text-4xl">
-          <strong>{{ parsedCpf() }}</strong>
+        <p class="text-balance font-geometric text-4xl font-bold">
+          {{ parsedCpf() }}
         </p>
       }
-      <p class="text-condensed text-2xl">
-        <strong>{{ name() }}</strong>
+      <p class="text-condensed text-2xl font-bold">
+        {{ name() }}
       </p>
     </div>
     <div>
       <p class="text-base">Valor da recarga</p>
       <div class="inline-flex gap-2">
         <p class="text-4xl">R$</p>
-        <p class="font-geometric text-4xl">
-          <strong>{{ parsedValue() }}</strong>
+        <p class="currency-value text-4xl">
+          {{ parsedValue() }}
         </p>
       </div>
     </div>
     <div>
       <p class="text-base">Forma de pagamento</p>
       <div class="inline-flex gap-4">
-        <p class="font-geometric text-4xl">
+        <p class="text-4xl">
           <strong>{{ paymentMethod() }}</strong>
         </p>
       </div>
@@ -36,13 +36,8 @@
   </div>
   <button
     (click)="onBackClicked()"
-    class="button-large button-split px-responsive bg-accent text-accent-contrast focus:ring-offset-background"
+    class="button-large button-fill button-full px-responsive mb-4 mt-8 shadow-sm hover:shadow-lg focus:ring-offset-background-contrast sm:mb-14"
   >
     Finalizar
-    <ng-icon
-      class="color-accent-contrast min-w-fit"
-      name="lucideMoveRight"
-      aria-hidden="true"
-    ></ng-icon>
   </button>
 </section>

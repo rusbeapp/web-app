@@ -21,14 +21,14 @@ import {
 } from '@ng-icons/lucide';
 
 import { CardGroupComponent } from '@rusbe/components/cards/card-group/card-group.component';
-import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { GeneralGoodsPixTransactionData } from '@rusbe/services/general-goods/general-goods.service';
 import { BrlCurrency } from '@rusbe/types/brl-currency';
 import { formatIdentifierAsCpf } from '@rusbe/utils/strings';
 
 @Component({
   selector: 'rusbe-top-up-pix',
-  imports: [CardGroupComponent, NgIcon, SpinnerComponent],
+  imports: [CardGroupComponent, NgIcon, InterludeComponent],
   templateUrl: './top-up-pix.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [

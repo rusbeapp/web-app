@@ -199,10 +199,6 @@
     @apply w-full justify-center;
   }
 
-  .button-split {
-    @apply button-base w-full justify-between;
-  }
-
   .button-large {
     @apply p-4 text-sm sm:text-lg;
   }

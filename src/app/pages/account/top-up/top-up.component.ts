@@ -19,7 +19,7 @@ import {
   HeaderComponent,
   HeaderType,
 } from '@rusbe/components/header/header.component';
-import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { TopUpCalculatorComponent } from '@rusbe/components/top-up/calculator/top-up-calculator.component';
 import { TopUpCreditCardComponent } from '@rusbe/components/top-up/credit-card/top-up-credit-card.component';
 import { TopUpInLocoHelperComponent } from '@rusbe/components/top-up/in-loco-helper/top-up-in-loco-helper.component';
@@ -34,6 +34,7 @@ import {
   AuthStateService,
 } from '@rusbe/services/auth-state/auth-state.service';
 import {
+  GeneralGoodsBalanceType,
   GeneralGoodsPartialGrantBalance,
   GeneralGoodsPixTransactionData,
   GeneralGoodsService,
@@ -51,8 +52,8 @@ import { RusbeError } from '@rusbe/types/error-handling';
     TopUpPixComponent,
     TopUpCreditCardComponent,
     TopUpInLocoHelperComponent,
-    SpinnerComponent,
     NgIcon,
+    InterludeComponent,
   ],
   templateUrl: './top-up.component.html',
   viewProviders: [
@@ -63,9 +64,9 @@ import { RusbeError } from '@rusbe/types/error-handling';
 })
 export class AccountTopUpPageComponent implements OnDestroy {
   readonly STAGE_MESSAGE = {
-    [TopUpStage.Calculator]: 'Quanto você quer adicionar?',
+    [TopUpStage.Calculator]: 'Quanto você deseja adicionar?',
     [TopUpStage.PaymentMethod]: 'Como você deseja adicionar créditos?',
-    [TopUpStage.InLocoHelper]: 'No guichê, mostre essas informações',
+    [TopUpStage.InLocoHelper]: 'No guichê, mostre essas informações:',
     [TopUpStage.Pix]: '',
     [TopUpStage.CreditCard]: '',
     error: '',
@@ -77,7 +78,13 @@ export class AccountTopUpPageComponent implements OnDestroy {
       'Ocorreu um erro ao tentar gerar o código Pix.',
     [TopUpError.Generic]:
       'Ocorreu um erro desconhecido. Por favor, tente novamente.',
+    [TopUpError.NotAvailableForBalanceType]:
+      'A recarga de créditos não está disponível para o seu tipo de subsídio.',
   };
+  readonly RETRYABLE_ERRORS = [
+    TopUpError.GeneralGoodsUnavailable,
+    TopUpError.PixUnavailable,
+  ];
   readonly FIFTEEN_MINUTES = 15 * 60 * 1000;
 
   calculatorComponent = viewChild(TopUpCalculatorComponent);
@@ -105,11 +112,12 @@ export class AccountTopUpPageComponent implements OnDestroy {
   });
   accountData = computed(() => {
     const accountData = this.authStateService.generalGoodsAccountData();
-    if (!accountData) return { fullName: '', cpfNumber: '' };
+    if (!accountData) return { fullName: '', cpfNumber: '', balanceType: null };
 
     return {
       fullName: accountData.fullName,
       cpfNumber: accountData.cpfNumber,
+      balanceType: accountData.balance.type,
     };
   });
   accountBalance = computed(
@@ -133,6 +141,13 @@ export class AccountTopUpPageComponent implements OnDestroy {
   });
   accountAuthState = computed(() => this.authStateService.accountAuthState());
 
+  canRetry = computed(() => {
+    const currentError = this.currentError();
+    if (!currentError) return false;
+
+    return this.RETRYABLE_ERRORS.includes(currentError);
+  });
+
   pixTimerSubscription?: Subscription;
 
   private readonly router = inject(Router);
@@ -146,7 +161,14 @@ export class AccountTopUpPageComponent implements OnDestroy {
 
     effect(() => {
       if (this.accountAuthState() === AccountAuthState.LoggedIn) {
-        this.currentError.set(null);
+        if (
+          this.accountData().balanceType ===
+          GeneralGoodsBalanceType.PartialGrant
+        ) {
+          this.currentError.set(null);
+        } else {
+          this.currentError.set(TopUpError.NotAvailableForBalanceType);
+        }
       } else {
         this.currentError.set(TopUpError.GeneralGoodsUnavailable);
       }
@@ -253,5 +275,6 @@ export enum TopUpStage {
 enum TopUpError {
   GeneralGoodsUnavailable = 'general-goods-unavailable',
   PixUnavailable = 'pix-unavailable',
+  NotAvailableForBalanceType = 'not-available-for-balance-type',
   Generic = 'generic-error',
 }

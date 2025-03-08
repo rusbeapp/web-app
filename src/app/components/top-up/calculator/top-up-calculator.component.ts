@@ -18,8 +18,6 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMoveRight } from '@ng-icons/lucide';
 import { NgxCurrencyDirective, NgxCurrencyInputMode } from 'ngx-currency';
 
 import { MealBalanceBreakdownComponent } from '@rusbe/components/meal-balance-breakdown/meal-balance-breakdown.component';
@@ -36,18 +34,12 @@ import { BrlCurrency } from '@rusbe/types/brl-currency';
     NgxCurrencyDirective,
     ReactiveFormsModule,
     WarningCardComponent,
-    NgIcon,
   ],
   templateUrl: './top-up-calculator.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex flex-grow flex-col items-start justify-start',
   },
-  viewProviders: [
-    provideIcons({
-      lucideMoveRight,
-    }),
-  ],
 })
 export class TopUpCalculatorComponent {
   submitted = output<boolean>();

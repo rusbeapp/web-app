@@ -1,11 +1,14 @@
 <section class="reduced-page-container flex w-full flex-grow p-4">
   <form
-    class="relative flex w-full flex-col gap-2"
+    class="relative flex w-full flex-col gap-4 sm:gap-6"
     (ngSubmit)="onSubmitValue()"
   >
-    <span class="absolute start-6 top-[43px] font-grotesque text-4xl">R$</span>
+    <span
+      class="absolute start-6 top-[41px] font-grotesque text-4xl sm:top-[45px]"
+      >R$</span
+    >
     <input
-      class="block w-full rounded-lg border-transparent bg-overlay p-10 pb-4 pl-[84px] font-geometric text-4xl font-bold shadow-lg placeholder:text-transparent autofill:pb-4 autofill:pt-10 focus:border-accent focus:pb-4 focus:pt-10 focus:ring-accent disabled:pointer-events-none disabled:opacity-50"
+      class="block w-full rounded-lg border-transparent bg-overlay p-10 pb-4 pl-[84px] font-geometric text-4xl font-bold shadow-sm placeholder:text-transparent autofill:pb-4 autofill:pt-10 focus:border-accent focus:pb-4 focus:pt-10 focus:ring-accent disabled:pointer-events-none disabled:opacity-50 sm:pt-11 sm:autofill:pt-11 sm:focus:pt-11"
       inputmode="numeric"
       type="text"
       name="top-up-value"
@@ -24,13 +27,13 @@
     @if (topUpValue.touched && topUpValue.hasError('lowTopUpValue')) {
       <rusbe-warning-card class="transition-appear"
         ><p>
-          O valor da recarga deve ser no mínimo R$ 1,00
+          O valor da recarga deve ser no mínimo R$ 1,00.
         </p></rusbe-warning-card
       >
     } @else if (topUpValue.touched && topUpValue.hasError('highTopUpValue')) {
       <rusbe-warning-card class="transition-appear"
         ><p>
-          O valor da recarga deve ser no máximo R$ 100,00
+          O valor da recarga deve ser no máximo R$ 100,00.
         </p></rusbe-warning-card
       >
     }
@@ -40,7 +43,7 @@
   <rusbe-meal-balance-breakdown></rusbe-meal-balance-breakdown>
 </section>
 <section
-  class="reduced-page-container px-responsive flex w-full flex-grow flex-col justify-end gap-5 p-4"
+  class="reduced-page-container px-responsive flex w-full flex-grow flex-col justify-end gap-4 py-8 sm:gap-6 sm:py-20"
 >
   @if (currentBalance().value.toString() !== newBalance().toString()) {
     <p>
@@ -55,13 +58,9 @@
   }
   <button
     (click)="onSubmitValue()"
-    class="button-large button-split bg-accent text-accent-contrast focus:ring-offset-background"
+    [disabled]="topUpValue.invalid"
+    class="button-large button-fill button-full focus:ring-offset-background"
   >
-    Confirmar
-    <ng-icon
-      class="color-accent-contrast min-w-fit"
-      name="lucideMoveRight"
-      aria-hidden="true"
-    ></ng-icon>
+    Prosseguir para método de pagamento
   </button>
 </section>
