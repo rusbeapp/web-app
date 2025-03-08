@@ -25,6 +25,7 @@ import {
   lucideUserRoundPen,
 } from '@ng-icons/lucide';
 
+import { AccountActionCardComponent } from '@rusbe/components/account-action-card/account-action-card.component';
 import {
   BalanceViewerColorScheme,
   BalanceViewerComponent,
@@ -33,6 +34,7 @@ import {
   HeaderComponent,
   HeaderType,
 } from '@rusbe/components/header/header.component';
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { UserAvatarComponent } from '@rusbe/components/user-avatar/user-avatar.component';
 import { AccountService } from '@rusbe/services/account/account.service';
 import {
@@ -51,6 +53,8 @@ import { formatIdentifierAsCpf } from '@rusbe/utils/strings';
     HeaderComponent,
     UserAvatarComponent,
     BalanceViewerComponent,
+    InterludeComponent,
+    AccountActionCardComponent,
   ],
   templateUrl: './details.component.html',
   viewProviders: [
@@ -84,6 +88,7 @@ export class AccountDetailsPageComponent {
   confirmDialogTemplate =
     viewChild.required<TemplateRef<Element>>('confirmDialog');
 
+  actionInProgress = signal<false | string>(false);
   currentRusbeUser = this.accountService.currentUser;
   authState = this.authStateService.accountAuthState;
   accountData = this.authStateService.generalGoodsAccountData;
@@ -110,11 +115,15 @@ export class AccountDetailsPageComponent {
   AccountAuthState = AccountAuthState;
 
   maskedCpf = computed(() => {
+    const authState = this.authState();
     const accountData = this.accountData();
 
+    if (authState === undefined) {
+      return undefined;
+    }
+
     if (!accountData) {
-      // TODO: Show a skeleton loading for the account data
-      return '•••.•••.•••-••';
+      return null;
     }
 
     return formatIdentifierAsCpf(accountData.cpfNumber, {
@@ -147,6 +156,7 @@ export class AccountDetailsPageComponent {
   }
 
   signOut() {
+    this.actionInProgress.set('Saindo...');
     this.accountService.signOut().then(() => {
       this.router.navigate(['/']);
     });
@@ -160,6 +170,7 @@ export class AccountDetailsPageComponent {
   }
 
   deleteAccount() {
+    this.actionInProgress.set('Apagando sua conta...');
     this.accountService.deleteAccount().then(() => {
       this.router.navigate(['/account/login']);
     });

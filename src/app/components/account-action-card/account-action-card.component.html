@@ -1,0 +1,34 @@
+@let aClasses =
+  'group flex flex-col gap-4 rounded-xl border-overlay-contrast bg-accent p-4 text-accent-contrast shadow-sm transition-all hover:bg-accent-hover hover:shadow-lg focus:outline-none focus:ring focus:ring-accent focus:ring-offset-2 focus:ring-offset-background active:bg-accent-hover sm:gap-6 sm:p-6';
+
+@if (cardContent()?.action?.externalLink) {
+  <a
+    [href]="cardContent()?.action?.externalLink"
+    class="{{ aClasses }}"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <ng-container *ngTemplateOutlet="cardInner"></ng-container>
+  </a>
+} @else {
+  <a [routerLink]="cardContent()?.action?.routerLink" class="{{ aClasses }}">
+    <ng-container *ngTemplateOutlet="cardInner"></ng-container>
+  </a>
+}
+
+<ng-template #cardInner>
+  <div>
+    <h2 class="mb-1 text-base font-bold sm:mb-2 sm:text-xl">
+      {{ cardContent()?.title }}
+    </h2>
+    <p class="text-xs font-normal sm:text-base">
+      {{ cardContent()?.text }}
+    </p>
+  </div>
+  <div
+    class="flex flex-row items-center justify-between rounded-xl border-2 border-accent-contrast px-4 py-2 font-geometric"
+  >
+    <p>{{ cardContent()?.action?.label }}</p>
+    <ng-icon aria-hidden="true" [name]="cardContent()?.action?.icon"></ng-icon>
+  </div>
+</ng-template>

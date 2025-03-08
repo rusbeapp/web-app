@@ -5,205 +5,241 @@
 
   <div class="reduced-page-container">
     <main class="grouping-cards-container my-2 sm:my-4">
-      <!-- TODO: Banner to complete General Goods wizard if not so -->
-      <div
-        class="px-responsive sm: flex flex-row items-center gap-4 py-4 sm:gap-6 sm:py-6"
-      >
-        <rusbe-user-avatar class="h-12 w-12 sm:h-16 sm:w-16" />
-        <div class="flex flex-col">
-          <p class="text-condensed text-lg sm:text-2xl">
-            {{ currentRusbeUser()?.displayName }}
-          </p>
-          <p class="font-geometric tabular-nums">{{ maskedCpf() }}</p>
+      @if (actionInProgress()) {
+        <div class="flex-center flex h-[80svh] flex-col justify-center">
+          <rusbe-interlude>{{ actionInProgress() }}</rusbe-interlude>
         </div>
-      </div>
-
-      @if (authState() === AccountAuthState.LoggedIn) {
-        <section class="grouping-card px-responsive">
-          <h2 class="grouping-card-title">Créditos</h2>
-
-          <div class="mb-2 sm:mb-3">
-            <rusbe-balance-viewer
-              [colorScheme]="BALANCE_VIEWER_COLOR_SCHEME"
-            ></rusbe-balance-viewer>
-          </div>
-
-          @if (showAddCreditsButton()) {
-            <div class="pb-1 pt-3 sm:pb-3">
-              <a
-                routerLink="/account/top-up"
-                class="button-fill button-full justify-start focus:ring-offset-overlay"
-              >
-                <ng-icon name="lucidePlus" aria-hidden="true"></ng-icon>
-                <span>Adicionar créditos</span>
-              </a>
-            </div>
-          }
-        </section>
-
-        <section class="grouping-card">
-          <h2 class="grouping-card-title px-responsive">
-            Seus dados na General Goods
-          </h2>
-
-          <div
-            class="grouping-card-strip flex flex-row items-center gap-4 border-b-2 border-accent/10 sm:gap-6"
-          >
-            <ng-icon
-              class="min-w-fit"
-              name="lucideMail"
-              aria-hidden="true"
-            ></ng-icon>
-            <span class="w-full">E-mail</span>
-            <span class="select-all font-bold">{{ accountData()?.email }}</span>
-          </div>
-
-          @if (plainTextPassword.value() === null) {
-            <div
-              class="grouping-card-strip flex flex-row justify-center border-b-2 border-accent/10 py-0.5 text-xs sm:py-2.5 sm:text-base"
-            >
-              <button
-                class="button-text focus:ring-offset-overlay"
-                (click)="refreshCredentials()"
-              >
-                <ng-icon
-                  class="min-w-fit"
-                  name="lucideLock"
-                  aria-hidden="true"
-                ></ng-icon>
-                Confirme que é você para ver a senha
-              </button>
-            </div>
+      } @else {
+        <div
+          class="px-responsive flex flex-row items-center gap-4 py-4 sm:gap-6 sm:py-6"
+        >
+          @if (currentRusbeUser()) {
+            <rusbe-user-avatar class="h-12 w-12 sm:h-16 sm:w-16" />
           } @else {
+            <div
+              class="h-12 w-12 animate-pulse rounded-full bg-overlay-contrast/30 sm:h-16 sm:w-16"
+            ></div>
+          }
+          <div class="flex flex-col">
+            @if (currentRusbeUser()) {
+              <p class="text-condensed text-lg sm:text-2xl">
+                {{ currentRusbeUser()?.displayName }}
+              </p>
+            } @else {
+              <div
+                class="my-1 h-5 w-48 max-w-full animate-pulse rounded-xl bg-overlay-contrast/30 sm:h-6 sm:w-56"
+              ></div>
+            }
+            @if (maskedCpf()) {
+              <p class="font-geometric tabular-nums">{{ maskedCpf() }}</p>
+            } @else if (maskedCpf() === undefined) {
+              <div
+                class="my-0.5 h-3 w-24 max-w-full animate-pulse rounded-xl bg-overlay-contrast/30 sm:my-1 sm:h-4 sm:w-32"
+              ></div>
+            }
+          </div>
+        </div>
+
+        @if (authState() === AccountAuthState.LoggedIn) {
+          <section class="grouping-card px-responsive">
+            <h2 class="grouping-card-title">Créditos</h2>
+
+            <div class="mb-2 sm:mb-3">
+              <rusbe-balance-viewer
+                [colorScheme]="BALANCE_VIEWER_COLOR_SCHEME"
+              ></rusbe-balance-viewer>
+            </div>
+
+            @if (showAddCreditsButton()) {
+              <div class="pb-1 pt-3 sm:pb-3">
+                <a
+                  routerLink="/account/top-up"
+                  class="button-fill button-full justify-start focus:ring-offset-overlay"
+                >
+                  <ng-icon name="lucidePlus" aria-hidden="true"></ng-icon>
+                  <span>Adicionar créditos</span>
+                </a>
+              </div>
+            }
+          </section>
+
+          <section class="grouping-card">
+            <h2 class="grouping-card-title px-responsive">
+              Seus dados na General Goods
+            </h2>
+
             <div
               class="grouping-card-strip flex flex-row items-center gap-4 border-b-2 border-accent/10 sm:gap-6"
             >
               <ng-icon
                 class="min-w-fit"
-                name="lucideKeyRound"
+                name="lucideMail"
                 aria-hidden="true"
               ></ng-icon>
-              <span class="w-full">Senha</span>
-              <span class="select-all font-bold">
-                @if (plainTextPassword.value() === undefined) {
-                  <div
-                    class="h-5 w-36 max-w-full animate-pulse rounded-xl bg-overlay-contrast/30 sm:h-7 sm:w-48"
-                  ></div>
-                } @else {
-                  @if (isPlainTextPasswordVisible()) {
-                    {{ plainTextPassword.value() }}
-                  } @else {
-                    {{ HIDDEN_PASSWORD_STRING }}
-                  }
-                }
-              </span>
+              <span class="w-full">E-mail</span>
+              <span class="select-all font-bold">{{
+                accountData()?.email
+              }}</span>
             </div>
 
-            <div class="px-responsive my-4 sm:my-6">
-              @if (plainTextPassword.value() !== undefined) {
+            @if (plainTextPassword.value() === null) {
+              <div
+                class="grouping-card-strip flex flex-row justify-center border-b-2 border-accent/10 py-0.5 text-xs sm:py-2.5 sm:text-base"
+              >
                 <button
-                  class="button-outline button-full justify-start px-4 focus:ring-offset-background sm:px-6"
-                  (click)="togglePlainTextPasswordVisibility()"
+                  class="button-text focus:ring-offset-overlay"
+                  (click)="refreshCredentials()"
                 >
                   <ng-icon
-                    name="{{
-                      isPlainTextPasswordVisible()
-                        ? 'lucideEyeOff'
-                        : 'lucideEye'
-                    }}"
+                    class="min-w-fit"
+                    name="lucideLock"
                     aria-hidden="true"
                   ></ng-icon>
-                  <span>
-                    @if (isPlainTextPasswordVisible()) {
-                      Esconder senha
-                    } @else {
-                      Mostrar senha
-                    }
-                  </span>
+                  Confirme que é você para ver a senha
                 </button>
-              } @else {
-                <div
-                  class="h-9 w-full animate-pulse rounded-full bg-overlay-contrast/30 sm:h-11"
-                ></div>
-              }
-            </div>
-          }
+              </div>
+            } @else {
+              <div
+                class="grouping-card-strip flex flex-row items-center gap-4 border-b-2 border-accent/10 sm:gap-6"
+              >
+                <ng-icon
+                  class="min-w-fit"
+                  name="lucideKeyRound"
+                  aria-hidden="true"
+                ></ng-icon>
+                <span class="w-full">Senha</span>
+                <span class="select-all font-bold">
+                  @if (plainTextPassword.value() === undefined) {
+                    <div
+                      class="h-5 w-36 max-w-full animate-pulse rounded-xl bg-overlay-contrast/30 sm:h-7 sm:w-48"
+                    ></div>
+                  } @else {
+                    @if (isPlainTextPasswordVisible()) {
+                      {{ plainTextPassword.value() }}
+                    } @else {
+                      {{ HIDDEN_PASSWORD_STRING }}
+                    }
+                  }
+                </span>
+              </div>
 
-          <p class="px-responsive mb-1 mt-2 text-xs sm:mt-4 sm:text-base">
-            Use estas informações caso precise fazer login no app oficial da
-            General Goods.
-            <strong>Não compartilhe sua senha com ninguém.</strong>
-          </p>
+              <div class="px-responsive my-4 sm:my-6">
+                @if (plainTextPassword.value() !== undefined) {
+                  <button
+                    class="button-outline button-full justify-start px-4 focus:ring-offset-background sm:px-6"
+                    (click)="togglePlainTextPasswordVisibility()"
+                  >
+                    <ng-icon
+                      name="{{
+                        isPlainTextPasswordVisible()
+                          ? 'lucideEyeOff'
+                          : 'lucideEye'
+                      }}"
+                      aria-hidden="true"
+                    ></ng-icon>
+                    <span>
+                      @if (isPlainTextPasswordVisible()) {
+                        Esconder senha
+                      } @else {
+                        Mostrar senha
+                      }
+                    </span>
+                  </button>
+                } @else {
+                  <div
+                    class="h-9 w-full animate-pulse rounded-full bg-overlay-contrast/30 sm:h-11"
+                  ></div>
+                }
+              </div>
+            }
+
+            <p class="px-responsive mb-1 mt-2 text-xs sm:mt-4 sm:text-base">
+              Use estas informações caso precise fazer login no app oficial da
+              General Goods.
+              <strong>Não compartilhe sua senha com ninguém.</strong>
+            </p>
+          </section>
+        } @else if (authState() === undefined) {
+          <div
+            class="grouping-card flex h-44 animate-pulse flex-col items-center justify-center sm:h-56"
+          ></div>
+
+          <div
+            class="grouping-card flex h-44 animate-pulse flex-col items-center justify-center sm:h-64"
+          ></div>
+        } @else {
+          <rusbe-account-action-card class="mx-4" />
+        }
+
+        <section class="grouping-card">
+          <h2 class="grouping-card-title px-responsive">Sua conta do Rusbé</h2>
+
+          <a
+            class="grouping-card-strip-button block w-full"
+            href="https://myaccount.google.com/personal-info{{
+              authUserQueryParam()
+            }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="grouping-card-strip-button-inner">
+              <ng-icon
+                class="min-w-fit"
+                name="lucideUserRoundPen"
+                aria-hidden="true"
+              ></ng-icon>
+              <div class="w-full text-overlay-contrast">
+                <h3>Editar meu perfil</h3>
+                <p class="my-1 text-xs font-normal sm:text-base">
+                  Seu perfil do Rusbé é vinculado à sua UFPE ID. Você será
+                  redirecionado para a página Minha Conta do Google para
+                  editá-lo.
+                </p>
+              </div>
+              <ng-icon
+                class="min-w-fit"
+                name="lucideSquareArrowOutUpRight"
+                aria-hidden="true"
+              ></ng-icon>
+            </div>
+          </a>
+
+          <button
+            class="grouping-card-strip-button w-full"
+            (click)="promptDeleteAccount()"
+          >
+            <div class="grouping-card-strip-button-inner">
+              <ng-icon
+                class="min-w-fit"
+                name="lucideTrash"
+                aria-hidden="true"
+              ></ng-icon>
+              <div class="w-full text-overlay-contrast">
+                <h3>Apagar minha conta</h3>
+                <p class="my-1 text-xs font-normal sm:text-base">
+                  Apaga sua conta do Rusbé e todos os seus dados associados. Sua
+                  conta da General Goods não será apagada.
+                </p>
+              </div>
+              <ng-icon
+                class="min-w-fit"
+                name="lucideChevronRight"
+                aria-hidden="true"
+              ></ng-icon>
+            </div>
+          </button>
         </section>
+
+        <div class="px-responsive mb-2 sm:mb-4">
+          <button
+            class="button-text focus:ring-offset-background"
+            (click)="signOut()"
+          >
+            <ng-icon name="lucideLogOut" aria-hidden="true"></ng-icon> Sair da
+            conta
+          </button>
+        </div>
       }
-
-      <section class="grouping-card">
-        <h2 class="grouping-card-title px-responsive">Sua conta do Rusbé</h2>
-
-        <a
-          class="grouping-card-strip-button block w-full"
-          href="https://myaccount.google.com/personal-info{{
-            authUserQueryParam()
-          }}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div class="grouping-card-strip-button-inner">
-            <ng-icon
-              class="min-w-fit"
-              name="lucideUserRoundPen"
-              aria-hidden="true"
-            ></ng-icon>
-            <div class="w-full text-overlay-contrast">
-              <h3>Editar meu perfil</h3>
-              <p class="my-1 text-xs font-normal sm:text-base">
-                Seu perfil do Rusbé é vinculado à sua UFPE ID. Você será
-                redirecionado para a página Minha Conta do Google para editá-lo.
-              </p>
-            </div>
-            <ng-icon
-              class="min-w-fit"
-              name="lucideSquareArrowOutUpRight"
-              aria-hidden="true"
-            ></ng-icon>
-          </div>
-        </a>
-
-        <button
-          class="grouping-card-strip-button w-full"
-          (click)="promptDeleteAccount()"
-        >
-          <div class="grouping-card-strip-button-inner">
-            <ng-icon
-              class="min-w-fit"
-              name="lucideTrash"
-              aria-hidden="true"
-            ></ng-icon>
-            <div class="w-full text-overlay-contrast">
-              <h3>Apagar minha conta</h3>
-              <p class="my-1 text-xs font-normal sm:text-base">
-                Apaga sua conta do Rusbé e todos os seus dados associados. Sua
-                conta da General Goods não será apagada.
-              </p>
-            </div>
-            <ng-icon
-              class="min-w-fit"
-              name="lucideChevronRight"
-              aria-hidden="true"
-            ></ng-icon>
-          </div>
-        </button>
-      </section>
-
-      <div class="px-responsive mb-2 sm:mb-4">
-        <button
-          class="button-text focus:ring-offset-background"
-          (click)="signOut()"
-        >
-          <ng-icon name="lucideLogOut" aria-hidden="true"></ng-icon> Sair da
-          conta
-        </button>
-      </div>
     </main>
   </div>
 </div>
