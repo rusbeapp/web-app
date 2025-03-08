@@ -204,30 +204,37 @@
             </div>
           </a>
 
-          <button
-            class="grouping-card-strip-button w-full"
-            (click)="promptDeleteAccount()"
-          >
-            <div class="grouping-card-strip-button-inner">
-              <ng-icon
-                class="min-w-fit"
-                name="lucideTrash"
-                aria-hidden="true"
-              ></ng-icon>
-              <div class="w-full text-overlay-contrast">
-                <h3>Apagar minha conta</h3>
-                <p class="my-1 text-xs font-normal sm:text-base">
-                  Apaga sua conta do Rusbé e todos os seus dados associados. Sua
-                  conta da General Goods não será apagada.
-                </p>
+          <!-- FIXME: Better way to request user to confirm credentials -->
+          @if (plainTextPassword.value() !== undefined) {
+            <button
+              class="grouping-card-strip-button w-full"
+              (click)="promptDeleteAccount()"
+            >
+              <div class="grouping-card-strip-button-inner">
+                <ng-icon
+                  class="min-w-fit"
+                  name="lucideTrash"
+                  aria-hidden="true"
+                ></ng-icon>
+                <div class="w-full text-overlay-contrast">
+                  <h3>Apagar minha conta</h3>
+                  <p class="my-1 text-xs font-normal sm:text-base">
+                    @if (plainTextPassword.value() === null) {
+                      Você precisará confirmar que é você para apagar sua conta.
+                    } @else {
+                      Apaga sua conta do Rusbé e todos os seus dados associados.
+                      Sua conta da General Goods não será apagada.
+                    }
+                  </p>
+                </div>
+                <ng-icon
+                  class="min-w-fit"
+                  name="lucideChevronRight"
+                  aria-hidden="true"
+                ></ng-icon>
               </div>
-              <ng-icon
-                class="min-w-fit"
-                name="lucideChevronRight"
-                aria-hidden="true"
-              ></ng-icon>
-            </div>
-          </button>
+            </button>
+          }
         </section>
 
         <div class="px-responsive mb-2 sm:mb-4">

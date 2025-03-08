@@ -163,6 +163,15 @@ export class AccountDetailsPageComponent {
   }
 
   promptDeleteAccount() {
+    if (this.plainTextPassword.value() === undefined) {
+      return;
+    }
+
+    if (this.plainTextPassword.value() === null) {
+      this.refreshCredentials();
+      return;
+    }
+
     this.dialog.open(this.confirmDialogTemplate(), {
       autoFocus: 'button',
       backdropClass: 'bg-beterraba/60',
