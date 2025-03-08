@@ -1,0 +1,68 @@
+name: release-check
+
+on:
+  pull_request:
+    branches:
+      - production
+
+jobs:
+  check_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate bot token
+        uses: actions/create-github-app-token@v1
+        id: maicon-token
+        with:
+          app-id: ${{ vars.MAICON_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.MAICON_BOT_PRIVATE_KEY }}
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Gather data
+        run: |
+          git fetch --tags
+          NEW_PR_VERSION=v$(node -p "require('./package.json').version")
+          LAST_VERSION_TAG=$(git rev-list --tags --max-count=1)
+
+          if [[ -n $LAST_VERSION_TAG ]]; then
+            LAST_VERSION=$(git describe --tags $LAST_VERSION_TAG)
+          else
+            LAST_VERSION=none
+          fi
+
+          echo 'NEW_PR_VERSION='$NEW_PR_VERSION >> $GITHUB_ENV
+          echo 'LAST_VERSION='$LAST_VERSION >> $GITHUB_ENV
+
+      - name: Comment PR with first release information
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ steps.maicon-token.outputs.token }}
+        with:
+          msg: "Yay! It looks like we're going to release the first version! 🚀 <br>Check if the data is correct.<br>**First version (this pull request):** ${{ env.NEW_PR_VERSION }}"
+        if: env.LAST_VERSION == 'none'
+
+      - name: Comment PR with new release information
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ steps.maicon-token.outputs.token }}
+        with:
+          msg: "Yay! It looks like we're going to release a new version! 🚀 <br>Check if the data is correct.<br>**New version (this pull request):** ${{ env.NEW_PR_VERSION }}<br>**Current version:** ${{ env.LAST_VERSION }}"
+        if: env.LAST_VERSION != 'none' && env.NEW_PR_VERSION != env.LAST_VERSION
+
+      - name: Comment PR if check failed
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ steps.maicon-token.outputs.token }}
+        with:
+          msg: 'Beep, bop! It looks like you **forgot to update the version number**. The current version and this pull request version are both ${{ env.NEW_PR_VERSION }}.'
+        if: env.LAST_VERSION != 'none' && env.NEW_PR_VERSION == env.LAST_VERSION
+
+      - name: Check release version
+        run: exit 1
+        if: env.NEW_PR_VERSION == env.LAST_VERSION

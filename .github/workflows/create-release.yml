@@ -1,0 +1,45 @@
+name: Create release
+
+on:
+  push:
+    branches:
+      - production
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate bot token
+        uses: actions/create-github-app-token@v1
+        id: maicon-token
+        with:
+          app-id: ${{ vars.MAICON_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.MAICON_BOT_PRIVATE_KEY }}
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Tag release
+        run: |
+          git config --global user.name "MaiconBot[bot]"
+          git config --global user.email "191420508+maiconbot[bot]@users.noreply.github.com"
+
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+          git tag -a v$PACKAGE_VERSION -m "chore: tag release $PACKAGE_VERSION"
+          git push --tags
+
+          echo 'TAG_NAME=v'$PACKAGE_VERSION >> $GITHUB_ENV
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ steps.maicon-token.outputs.token }}
+          tag: ${{ env.TAG_NAME }}
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="Rusbé ${tag#v}" \
+              --generate-notes
