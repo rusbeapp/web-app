@@ -1,4 +1,4 @@
-name: Create release
+name: create-release
 
 on:
   push:
@@ -41,5 +41,5 @@ jobs:
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
-              --title="Rusbé ${tag#v}" \
+              --title="rusbeapp/web-app ${tag#v}" \
               --generate-notes
