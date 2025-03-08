@@ -17,4 +17,5 @@ export const environment = {
   accountMailDomain: 'ufpe.br',
   archiveUrl: 'https://archive.rusbe.app',
   generalGoodsApiUrl: 'https://driving-willing-vulture.ngrok-free.app',
+  sentryConfig: {},
 };

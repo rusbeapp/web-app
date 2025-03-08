@@ -1,12 +1,14 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
+  ErrorHandler,
   inject,
   isDevMode,
   provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
 import {
+  Router,
   provideRouter,
   withInMemoryScrolling,
   withViewTransitions,
@@ -26,6 +28,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { provideNgIconLoader, withCaching } from '@ng-icons/core';
+import * as Sentry from '@sentry/angular';
 
 import { routes } from '@rusbe/app.routes';
 import { environment } from '@rusbe/environments/environment';
@@ -42,6 +45,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(PreferencesService);
       inject(AccountService);
+      inject(Sentry.TraceService);
     }),
     provideRouter(
       routes,
@@ -86,5 +90,13 @@ export const appConfig: ApplicationConfig = {
         responseType: 'text',
       });
     }, withCaching()),
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
   ],
 };
