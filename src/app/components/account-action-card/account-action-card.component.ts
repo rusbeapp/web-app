@@ -14,7 +14,7 @@ import {
   selector: 'rusbe-account-action-card',
   imports: [CommonModule, RouterModule, NgIcon],
   templateUrl: './account-action-card.component.html',
-  providers: [provideIcons({ lucideChevronRight, lucideExternalLink })],
+  viewProviders: [provideIcons({ lucideChevronRight, lucideExternalLink })],
 })
 export class AccountActionCardComponent {
   authStateService = inject(AuthStateService);
