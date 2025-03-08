@@ -23,10 +23,13 @@ jobs:
         env:
           CI: true
 
-      - name: Build web app
+      - name: Build web app and send source maps to Sentry
         run: |
           npm run build
+          npm run sentry:sourcemaps
+          rm -rf dist/browser/**/*.map
         env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           CI: true
 
       - name: Deploy to Firebase
