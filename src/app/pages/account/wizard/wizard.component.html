@@ -17,8 +17,7 @@
             <div
               class="transition-appear flex h-full w-full flex-col items-center justify-center gap-2 sm:gap-4"
             >
-              <rusbe-spinner class="h-8 w-8 text-accent"></rusbe-spinner>
-              <p class="text-base sm:text-xl">Um momento...</p>
+              <rusbe-interlude>Um momento...</rusbe-interlude>
             </div>
           }
 
@@ -26,10 +25,20 @@
             <div
               class="transition-appear flex h-full w-full flex-col items-center justify-center gap-2 sm:gap-4"
             >
-              <p class="text-base sm:text-xl">
-                Infelizmente, o sistema da General Goods está fora do ar.
-              </p>
-              <p>Não se preocupe, você pode configurar sua conta mais tarde.</p>
+              <ng-icon
+                class="text-2xl text-accent sm:text-3xl"
+                name="lucideInfo"
+                aria-hidden="true"
+              ></ng-icon>
+
+              <div class="text-balance text-center">
+                <p class="text-lg sm:text-2xl">
+                  Infelizmente, o sistema da General Goods está fora do ar.
+                </p>
+                <p class="mt-1 sm:mt-2">
+                  Não se preocupe, você pode configurar sua conta mais tarde.
+                </p>
+              </div>
             </div>
           }
 

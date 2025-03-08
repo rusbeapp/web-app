@@ -8,11 +8,14 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideInfo } from '@ng-icons/lucide';
+
 import {
   HeaderComponent,
   HeaderType,
 } from '@rusbe/components/header/header.component';
-import { SpinnerComponent } from '@rusbe/components/spinner/spinner.component';
+import { InterludeComponent } from '@rusbe/components/interlude/interlude.component';
 import { WizardAccountConfigurationErrorComponent } from '@rusbe/components/wizard/account-configuration-error/account-configuration-error.component';
 import { WizardAccountSetupDisclaimerComponent } from '@rusbe/components/wizard/account-setup-disclaimer/account-setup-disclaimer.component';
 import { WizardAccountVerificationComponent } from '@rusbe/components/wizard/account-verification/account-verification.component';
@@ -39,7 +42,6 @@ import {
   imports: [
     WizardFirebaseUserCheckComponent,
     HeaderComponent,
-    SpinnerComponent,
     WizardIntegrationTypeChooserComponent,
     WizardAccountSetupDisclaimerComponent,
     WizardCredentialMismatchWarningComponent,
@@ -50,8 +52,11 @@ import {
     WizardAccountConfigurationErrorComponent,
     WizardAccountVerificationComponent,
     WizardSetupCompleteComponent,
+    InterludeComponent,
+    NgIcon,
   ],
   templateUrl: './wizard.component.html',
+  viewProviders: [provideIcons({ lucideInfo })],
 })
 export class AccountWizardPageComponent {
   private readonly accountService = inject(AccountService);
