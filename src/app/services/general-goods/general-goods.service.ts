@@ -92,8 +92,12 @@ export class GeneralGoodsService {
 
       if (cause instanceof HttpErrorResponse) {
         // First, we check if the request wasn't successful due to an internal server error (500),
-        // or if there some other network or CORS error (status 0).
-        if (cause.status === 500 || cause.status === 0) {
+        // gateway timeout (504), or if there some other network or CORS error (status 0).
+        if (
+          cause.status === 500 ||
+          cause.status === 504 ||
+          cause.status === 0
+        ) {
           throw new RusbeError(GeneralGoodsRequestError.ServiceUnavailable, {
             cause,
           });
